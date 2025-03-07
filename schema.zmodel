@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+plugin hooks {
+  provider = '@zenstackhq/tanstack-query'
+  target = 'react'
+  version = 'v5'
+  output = "./src/lib/hooks"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+abstract model BaseModel {
+  id        String   @id @default(ulid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User extends BaseModel {
+  email    String  @unique
+  password String  @password @omit
+  name     String?
+  role     Role    @default(USER)
+
+  @@allow('create,read', true)
+  @@allow('update,delete', auth().role == 'ADMIN')
+}
+
+enum Role {
+  ADMIN
+  USER
+}
