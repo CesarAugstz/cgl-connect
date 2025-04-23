@@ -113,7 +113,7 @@ export default function DashboardDetailPage({ params }: any){
           {dashboardDevices?.length === 0 ? (
             <div className="flex flex-col items-center justify-center border border-dashed rounded-lg p-12 mt-8">
               <LayoutGrid className="h-16 w-16 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">Essa dashboard está vazia/h3>
+              <h3 className="text-lg font-medium mb-2">Essa dashboard está vazia </h3>
               <p className="text-muted-foreground mb-6">Add dispositivos a esta dashboard</p>
               <Button onClick={() => setIsAddDeviceModalOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
