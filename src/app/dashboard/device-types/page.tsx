@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Plus, PlusCircle, RefreshCw } from 'lucide-react'
+import { PlusCircle, RefreshCw } from 'lucide-react'
 import { useFindManyDeviceType } from '@/lib/zenstack-hooks'
 import DeviceTypeTable from '@/components/device-types/device-type-table'
 import DeviceTypeForm from '@/components/device-types/device-type-form'
@@ -17,9 +17,7 @@ import {
 
 export default function DeviceTypesPage() {
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const [editingDeviceTypeId, setEditingDeviceTypeId] = useState<
-    string | undefined
-  >()
+  const [editingDeviceTypeId, setEditingDeviceTypeId] = useState<string | undefined>()
 
   const {
     data: deviceTypes,
@@ -53,7 +51,7 @@ export default function DeviceTypesPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Device Types Management</h1>
+        <h1 className="text-3xl font-bold">Gerenciamento de Tipos de Dispositivo</h1>
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -62,20 +60,20 @@ export default function DeviceTypesPage() {
             className="flex items-center gap-1"
           >
             <RefreshCw className="h-4 w-4" />
-            Refresh
+            Atualizar
           </Button>
           <Button onClick={handleAddNew} className="flex items-center gap-1">
             <PlusCircle className="h-4 w-4" />
-            Add New
+            Adicionar Novo
           </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Device Types</CardTitle>
+          <CardTitle>Tipos de Dispositivo</CardTitle>
           <CardDescription>
-            Manage all your device types from this dashboard.
+            Gerencie todos os tipos de dispositivo neste painel.
           </CardDescription>
         </CardHeader>
 

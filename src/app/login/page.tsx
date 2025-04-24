@@ -57,8 +57,8 @@ export default function LoginPage() {
 
       router.push("/dashboard");
     } catch (error) {
-      console.error("Login failed:", error);
-      setLoginError("An unexpected error occurred. Please try again.");
+      console.error("Falha no login:", error);
+      setLoginError("Ocorreu um erro inesperado. Por favor, tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -69,15 +69,15 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+            Acesse sua conta
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{" "}
+            Ou{" "}
             <Link
               href="/register"
               className="font-medium text-indigo-600 hover:text-indigo-500"
             >
-              create a new account
+              crie uma nova conta
             </Link>
           </p>
         </div>
@@ -92,7 +92,7 @@ export default function LoginPage() {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email" className="sr-only">
-                Email address
+                Endereço de e-mail
               </label>
               <input
                 id="email"
@@ -102,7 +102,7 @@ export default function LoginPage() {
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
                   errors.email ? "border-red-300" : "border-gray-300"
                 } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
-                placeholder="Email address"
+                placeholder="Endereço de e-mail"
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">
@@ -112,7 +112,7 @@ export default function LoginPage() {
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
+                Senha
               </label>
               <div className="relative">
                 <input
@@ -123,14 +123,14 @@ export default function LoginPage() {
                   className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
                     errors.password ? "border-red-300" : "border-gray-300"
                   } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
-                  placeholder="Password"
+                  placeholder="Senha"
                 />
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  {showPassword ? "Ocultar" : "Mostrar"}
                 </button>
               </div>
               {errors.password && (
@@ -153,7 +153,7 @@ export default function LoginPage() {
                 htmlFor="remember"
                 className="ml-2 block text-sm text-gray-900"
               >
-                Remember me
+                Lembrar de mim
               </label>
             </div>
 
@@ -162,7 +162,7 @@ export default function LoginPage() {
                 href="/forgot-password"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Forgot your password?
+                Esqueceu sua senha?
               </Link>
             </div>
           </div>
@@ -173,14 +173,14 @@ export default function LoginPage() {
               disabled={isLoading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {isLoading ? "Signing in..." : "Sign in"}
+              {isLoading ? "Entrando..." : "Entrar"}
             </button>
           </div>
 
           <div className="mt-4 text-center text-sm">
-            <div className="text-gray-600">Test credentials:</div>
+            <div className="text-gray-600">Credenciais de teste:</div>
             <div className="font-mono text-gray-800">Email: cgl@email.com</div>
-            <div className="font-mono text-gray-800">Password: password123</div>
+            <div className="font-mono text-gray-800">Senha: password123</div>
           </div>
         </form>
       </div>

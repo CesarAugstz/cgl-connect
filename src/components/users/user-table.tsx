@@ -87,7 +87,7 @@ export default function UserTable({
   }
 
   if (users.length === 0) {
-    return <div className="text-center py-4">No users found</div>
+    return <div className="text-center py-4">Nenhum usuário encontrado</div>
   }
 
   return (
@@ -95,24 +95,24 @@ export default function UserTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Devices</TableHead>
-            <TableHead>Last Updated</TableHead>
-            <TableHead className="w-[80px]">Actions</TableHead>
+            <TableHead>Nome</TableHead>
+            <TableHead>E-mail</TableHead>
+            <TableHead>Função</TableHead>
+            <TableHead>Dispositivos</TableHead>
+            <TableHead>Última atualização</TableHead>
+            <TableHead className="w-[80px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map(user => (
             <TableRow key={user.id}>
               <TableCell className="font-medium">
-                {user.name || <span className="text-muted-foreground italic">Not set</span>}
+                {user.name || <span className="text-muted-foreground italic">Não informado</span>}
               </TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>
                 <Badge variant={getRoleBadgeVariant(user.role)}>
-                  {user.role}
+                  {user.role === 'ADMIN' ? 'Administrador' : 'Usuário'}
                 </Badge>
               </TableCell>
               <TableCell>{user._count?.devices || 0}</TableCell>
@@ -127,14 +127,14 @@ export default function UserTable({
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => onClickEdit(user.id)}>
                       <Edit className="mr-2 h-4 w-4" />
-                      Edit
+                      Editar
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setUserToDelete(user.id)}
                       className="text-red-600"
                     >
                       <Trash className="mr-2 h-4 w-4" />
-                      Delete
+                      Excluir
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -150,19 +150,18 @@ export default function UserTable({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              user and their associated data.
+              Esta ação não poderá ser desfeita. Isso excluirá permanentemente o usuário e todos os dados associados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700"
             >
-              Delete
+              Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

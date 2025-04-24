@@ -42,7 +42,7 @@ export default function DevicesPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Device Management</h1>
+        <h1 className="text-3xl font-bold">Gerenciamento de Dispositivos</h1>
         <div className="flex gap-2">
           <Button 
             variant="outline" 
@@ -51,23 +51,23 @@ export default function DevicesPage() {
             className="flex items-center gap-1"
           >
             <RefreshCw className="h-4 w-4" />
-            Refresh
+            Atualizar
           </Button>
           <Button 
             onClick={() => setIsCreateModalOpen(true)}
             className="flex items-center gap-1"
           >
             <PlusCircle className="h-4 w-4" />
-            Add Device
+            Adicionar Dispositivo
           </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Devices</CardTitle>
+          <CardTitle>Dispositivos</CardTitle>
           <CardDescription>
-            Manage all your IoT devices from this dashboard.
+            Gerencie todos os seus dispositivos IoT neste painel.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -78,10 +78,10 @@ export default function DevicesPage() {
             className="mb-6"
           >
             <TabsList>
-              <TabsTrigger value="all">All Devices</TabsTrigger>
+              <TabsTrigger value="all">Todos os Dispositivos</TabsTrigger>
               <TabsTrigger value="online">Online</TabsTrigger>
               <TabsTrigger value="offline">Offline</TabsTrigger>
-              <TabsTrigger value="unknown">Unknown</TabsTrigger>
+              <TabsTrigger value="unknown">Desconhecido</TabsTrigger>
             </TabsList>
           </Tabs>
 

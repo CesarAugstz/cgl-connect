@@ -83,19 +83,19 @@ export default function DeviceDetailPage() {
             className="mr-4"
           >
             <ChevronLeft className="mr-2 h-4 w-4" />
-            Back to Devices
+            Voltar para Dispositivos
           </Button>
         </div>
         <Card className="w-full max-w-3xl mx-auto">
           <CardHeader>
-            <CardTitle>Device Not Found</CardTitle>
+            <CardTitle>Dispositivo Não Encontrado</CardTitle>
             <CardDescription>
-              The device you're looking for doesn't exist or has been removed.
+              O dispositivo que você procura não existe ou foi removido.
             </CardDescription>
           </CardHeader>
           <CardFooter>
             <Button onClick={() => router.push('/dashboard/devices')}>
-              Return to Device List
+              Voltar para a Lista de Dispositivos
             </Button>
           </CardFooter>
         </Card>
@@ -114,7 +114,7 @@ export default function DeviceDetailPage() {
           </Badge>
         )
       default:
-        return <Badge variant="outline">Unknown</Badge>
+        return <Badge variant="outline">Desconhecido</Badge>
     }
   }
 
@@ -123,7 +123,6 @@ export default function DeviceDetailPage() {
     return path ? `${baseTopic}/${path}` : baseTopic
   }
 
-  // Group telemetry by topic suffix
   const groupedTelemetry = device.telemetry.reduce(
     (acc, item) => {
       if (!acc[item.topicSuffix]) {
@@ -145,7 +144,7 @@ export default function DeviceDetailPage() {
             className="mr-4"
           >
             <ChevronLeft className="mr-2 h-4 w-4" />
-            Back to Devices
+            Voltar para Dispositivos
           </Button>
           <h1 className="text-2xl font-bold">{device.name}</h1>
           <div className="ml-3">{getStatusBadge(device.status)}</div>
@@ -157,7 +156,7 @@ export default function DeviceDetailPage() {
             className="flex items-center gap-1"
           >
             <Edit className="h-4 w-4" />
-            Edit Device
+            Editar Dispositivo
           </Button>
         </div>
       </div>
@@ -165,55 +164,57 @@ export default function DeviceDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Device Information</CardTitle>
+            <CardTitle>Informações do Dispositivo</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <div className="text-sm font-medium text-gray-500">
-                Device Type
+                Tipo do Dispositivo
               </div>
               <div>{device.deviceType.name}</div>
             </div>
 
             <div>
               <div className="text-sm font-medium text-gray-500">
-                Description
+                Descrição
               </div>
-              <div>{device.description || 'No description provided'}</div>
-            </div>
-
-            <div>
-              <div className="text-sm font-medium text-gray-500">Location</div>
-              <div>{device.location?.name || 'No location assigned'}</div>
+              <div>{device.description || 'Nenhuma descrição fornecida'}</div>
             </div>
 
             <div>
               <div className="text-sm font-medium text-gray-500">
-                Assigned User
+                Localização
               </div>
-              <div>{device.user?.name || 'No user assigned'}</div>
+              <div>{device.location?.name || 'Nenhuma localização atribuída'}</div>
             </div>
 
             <div>
               <div className="text-sm font-medium text-gray-500">
-                Base Topic
+                Usuário Atribuído
+              </div>
+              <div>{device.user?.name || 'Nenhum usuário atribuído'}</div>
+            </div>
+
+            <div>
+              <div className="text-sm font-medium text-gray-500">
+                Tópico Base
               </div>
               <div className="font-mono text-sm">{device.baseTopic}</div>
             </div>
 
             <div>
               <div className="text-sm font-medium text-gray-500">
-                Last Updated
+                Última Atualização
               </div>
               <div>
-                {dayJs(device.updatedAt).format('MMM D, YYYY HH:mm:ss')}
+                {dayJs(device.updatedAt).format('DD [de] MMMM [de] YYYY HH:mm:ss')}
               </div>
             </div>
 
             <div>
-              <div className="text-sm font-medium text-gray-500">Created</div>
+              <div className="text-sm font-medium text-gray-500">Criado</div>
               <div>
-                {dayJs(device.createdAt).format('MMM D, YYYY HH:mm:ss')}
+                {dayJs(device.createdAt).format('DD [de] MMMM [de] YYYY HH:mm:ss')}
               </div>
             </div>
           </CardContent>
@@ -221,22 +222,22 @@ export default function DeviceDetailPage() {
 
         <Card className="col-span-1 md:col-span-2">
           <CardHeader>
-            <CardTitle>Device Details</CardTitle>
+            <CardTitle>Detalhes do Dispositivo</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="telemetry">
               <TabsList className="mb-4">
                 <TabsTrigger value="telemetry" className="flex items-center">
                   <Activity className="mr-2 h-4 w-4" />
-                  Telemetry
+                  Telemetria
                 </TabsTrigger>
                 <TabsTrigger value="alerts" className="flex items-center">
                   <AlertTriangle className="mr-2 h-4 w-4" />
-                  Alerts
+                  Alertas
                 </TabsTrigger>
                 <TabsTrigger value="settings" className="flex items-center">
                   <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                  Configurações
                 </TabsTrigger>
               </TabsList>
 
@@ -244,11 +245,11 @@ export default function DeviceDetailPage() {
                 {!device.deviceType.topicSuffixes ||
                 device.deviceType.topicSuffixes.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    No topic suffixes configured for this device type
+                    Nenhum sufixo de tópico configurado para este tipo de dispositivo
                   </div>
                 ) : device.telemetry.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    No telemetry data available for this device
+                    Nenhum dado de telemetria disponível para este dispositivo
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -256,7 +257,7 @@ export default function DeviceDetailPage() {
                       <Card key={suffix} className="overflow-hidden">
                         <CardHeader className="pb-2">
                           <CardTitle className="text-lg">
-                            Topic:{' '}
+                            Tópico:{' '}
                             {getFullTopicPath(
                               device.baseTopic,
                               suffix as TopicSuffix
@@ -274,10 +275,10 @@ export default function DeviceDetailPage() {
                               <AccordionItem key={item.id} value={item.id}>
                                 <AccordionTrigger className="py-3 hover:no-underline">
                                   <div className="flex justify-between items-center w-full pr-4">
-                                    <span>Telemetry {index + 1}</span>
+                                    <span>Telemetria {index + 1}</span>
                                     <span className="text-sm text-gray-500">
                                       {dayJs(item.receivedAt).format(
-                                        'MMM D, YYYY HH:mm:ss'
+                                        'DD/MM/YYYY HH:mm:ss'
                                       )}
                                     </span>
                                   </div>
@@ -300,7 +301,7 @@ export default function DeviceDetailPage() {
               <TabsContent value="alerts">
                 {device.alerts.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    No alerts for this device
+                    Nenhum alerta para este dispositivo
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -317,12 +318,10 @@ export default function DeviceDetailPage() {
                       >
                         <div className="flex justify-between items-center mb-2">
                           <div className="font-medium">
-                            {alert.severity} Alert
+                            Alerta {alert.severity}
                           </div>
                           <div className="text-sm text-gray-500">
-                            {dayJs(alert.createdAt).format(
-                              'MMM D, YYYY HH:mm:ss'
-                            )}
+                            {dayJs(alert.createdAt).format('DD/MM/YYYY HH:mm:ss')}
                           </div>
                         </div>
                         <div>{alert.message}</div>
@@ -336,7 +335,7 @@ export default function DeviceDetailPage() {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-lg font-medium mb-2">
-                      Available Topics
+                      Tópicos Disponíveis
                     </h3>
                     {device.deviceType.topicSuffixes &&
                     device.deviceType.topicSuffixes.length > 0 ? (
@@ -357,33 +356,33 @@ export default function DeviceDetailPage() {
                       </div>
                     ) : (
                       <div className="text-gray-500">
-                        No topics configured for this device type
+                        Nenhum tópico configurado para este tipo de dispositivo
                       </div>
                     )}
                   </div>
 
                   <div>
                     <h3 className="text-lg font-medium mb-2">
-                      Device Management
+                      Gerenciamento do Dispositivo
                     </h3>
                     <div className="space-y-2">
                       <Button
                         variant="outline"
                         className="w-full justify-start"
                       >
-                        Reboot Device
+                        Reiniciar Dispositivo
                       </Button>
                       <Button
                         variant="outline"
                         className="w-full justify-start"
                       >
-                        Update Firmware
+                        Atualizar Firmware
                       </Button>
                       <Button
                         variant="destructive"
                         className="w-full justify-start"
                       >
-                        Reset to Factory Defaults
+                        Restaurar Padrões de Fábrica
                       </Button>
                     </div>
                   </div>

@@ -11,7 +11,11 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/loading-spinner'
-import { useCreateDashboard, useFindUniqueDashboard, useUpdateDashboard } from '@/lib/zenstack-hooks'
+import {
+  useCreateDashboard,
+  useFindUniqueDashboard,
+  useUpdateDashboard,
+} from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
 import { useSession } from 'next-auth/react'
 import DashboardFormFields, { DashboardFormValues } from './dashboard-form-fields'
@@ -61,10 +65,10 @@ export default function DashboardForm({
           onSuccess: () => {
             setIsSubmitting(false)
             onSuccess()
-            toast.success('Dashboard updated successfully')
+            toast.success('Painel atualizado com sucesso')
           },
           onError: error => {
-            console.error('Error updating dashboard:', error)
+            console.error('Erro ao atualizar painel:', error)
             setIsSubmitting(false)
             toast.exception(error)
           },
@@ -82,10 +86,10 @@ export default function DashboardForm({
           onSuccess: () => {
             setIsSubmitting(false)
             onSuccess()
-            toast.success('Dashboard created successfully')
+            toast.success('Painel criado com sucesso')
           },
           onError: error => {
-            console.error('Error creating dashboard:', error)
+            console.error('Erro ao criar painel:', error)
             setIsSubmitting(false)
             toast.exception(error)
           },
@@ -98,11 +102,13 @@ export default function DashboardForm({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Edit Dashboard' : 'Create Dashboard'}</DialogTitle>
+          <DialogTitle>
+            {isEditMode ? 'Editar Painel' : 'Criar Novo Painel'}
+          </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? 'Update the dashboard information in the form below.'
-              : 'Enter the details for the new dashboard.'}
+              ? 'Atualize as informações do painel no formulário abaixo.'
+              : 'Preencha os dados para criar um novo painel.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -122,16 +128,16 @@ export default function DashboardForm({
           >
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onClose}>
-                Cancel
+                Cancelar
               </Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <LoadingSpinner className="mr-2 h-4 w-4" />
-                    {isEditMode ? 'Updating...' : 'Creating...'}
+                    {isEditMode ? 'Atualizando...' : 'Criando...'}
                   </>
                 ) : (
-                  <>{isEditMode ? 'Update Dashboard' : 'Create Dashboard'}</>
+                  <>{isEditMode ? 'Atualizar Painel' : 'Criar Painel'}</>
                 )}
               </Button>
             </DialogFooter>

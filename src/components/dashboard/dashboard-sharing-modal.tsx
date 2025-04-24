@@ -33,7 +33,7 @@ export default function DashboardSharingModal({
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [isPublic, setIsPublic] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const toast = useToast()
+  const toast = useToast();
 
   const { data: dashboard, isLoading: isDashboardLoading } = useFindUniqueDashboard({
     where: { id: dashboardId },
@@ -81,7 +81,7 @@ export default function DashboardSharingModal({
         onClose();
       },
       onError: (error) => {
-        console.error("Error updating sharing settings:", error);
+        console.error("Erro ao atualizar configurações de compartilhamento:", error);
         setIsSubmitting(false);
         toast.exception(error);
       }
@@ -99,16 +99,15 @@ export default function DashboardSharingModal({
   const handleCopyLink = async () => {
     const url = `${window.location.origin}/dashboard/${dashboardId}`;
     await navigator.clipboard.writeText(url);
-    
   };
   
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Share Dashboard</DialogTitle>
+          <DialogTitle>Compartilhar Painel</DialogTitle>
           <DialogDescription>
-            Control who can access this dashboard
+            Controle quem pode acessar este painel
           </DialogDescription>
         </DialogHeader>
         
@@ -125,7 +124,7 @@ export default function DashboardSharingModal({
                   onCheckedChange={setIsPublic} 
                   id="public"
                 />
-                <Label htmlFor="public">Make dashboard public</Label>
+                <Label htmlFor="public">Tornar o painel público</Label>
               </div>
               
               {isPublic && (
@@ -142,9 +141,9 @@ export default function DashboardSharingModal({
               )}
               
               <div className="space-y-2">
-                <Label>Share with specific users</Label>
+                <Label>Compartilhar com usuários específicos</Label>
                 <Input
-                  placeholder="Search users by name or email"
+                  placeholder="Buscar usuários por nome ou e-mail"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -160,7 +159,7 @@ export default function DashboardSharingModal({
                         onClick={() => toggleUserSelection(user.id)}
                       >
                         <div>
-                          <p className="font-medium">{user.name || 'Unnamed User'}</p>
+                          <p className="font-medium">{user.name || 'Usuário sem nome'}</p>
                           <p className="text-sm text-muted-foreground">{user.email}</p>
                         </div>
                         <div>
@@ -174,12 +173,12 @@ export default function DashboardSharingModal({
                 )}
                 
                 {searchQuery.length > 2 && users && users.length === 0 && (
-                  <p className="text-sm text-muted-foreground">No users found</p>
+                  <p className="text-sm text-muted-foreground">Nenhum usuário encontrado</p>
                 )}
                 
                 {selectedUsers.length > 0 && (
                   <div className="mt-4">
-                    <Label>Shared with</Label>
+                    <Label>Compartilhado com</Label>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {selectedUsers.map(userId => {
                         const user = dashboard?.sharedWith.find(u => u.id === userId);
@@ -206,16 +205,16 @@ export default function DashboardSharingModal({
             
             <DialogFooter>
               <Button variant="outline" onClick={onClose}>
-                Cancel
+                Cancelar
               </Button>
               <Button onClick={handleSave} disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <LoadingSpinner className="mr-2 h-4 w-4" />
-                    Saving...
+                    Salvando...
                   </>
                 ) : (
-                  "Save"
+                  "Salvar"
                 )}
               </Button>
             </DialogFooter>

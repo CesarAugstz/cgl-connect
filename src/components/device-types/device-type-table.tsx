@@ -55,10 +55,7 @@ export default function DeviceTypeTable({
   onRefresh,
   onClickEdit
 }: DeviceTypeTableProps) {
-  const [deviceTypeToDelete, setDeviceTypeToDelete] = useState<string | null>(
-    null
-  )
-
+  const [deviceTypeToDelete, setDeviceTypeToDelete] = useState<string | null>(null)
   const { mutate: deleteDeviceType } = useDeleteDeviceType()
 
   const handleDelete = () => {
@@ -78,7 +75,7 @@ export default function DeviceTypeTable({
   }
 
   if (deviceTypes.length === 0) {
-    return <div className="text-center py-4">No device types found</div>
+    return <div className="text-center py-4 text-muted-foreground">Nenhum tipo de dispositivo encontrado</div>
   }
 
   return (
@@ -86,11 +83,11 @@ export default function DeviceTypeTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Supported Topics</TableHead>
-            <TableHead>Devices</TableHead>
-            <TableHead>Last Updated</TableHead>
-            <TableHead className="w-[80px]">Actions</TableHead>
+            <TableHead>Nome</TableHead>
+            <TableHead>Tópicos Suportados</TableHead>
+            <TableHead>Dispositivos</TableHead>
+            <TableHead>Última Atualização</TableHead>
+            <TableHead className="w-[80px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -99,13 +96,14 @@ export default function DeviceTypeTable({
               <TableCell className="font-medium">{deviceType.name}</TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-1">
-                  {deviceType.topicSuffixes.map(suffix => (
-                    <Badge key={suffix} variant="outline" className="text-xs">
-                      {topicSuffixToPath[suffix]}
-                    </Badge>
-                  ))}
-                  {deviceType.topicSuffixes.length === 0 && (
-                    <span className="text-muted-foreground text-sm">None</span>
+                  {deviceType.topicSuffixes.length > 0 ? (
+                    deviceType.topicSuffixes.map(suffix => (
+                      <Badge key={suffix} variant="outline" className="text-xs">
+                        {topicSuffixToPath[suffix]}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-muted-foreground text-sm">Nenhum</span>
                   )}
                 </div>
               </TableCell>
@@ -119,18 +117,16 @@ export default function DeviceTypeTable({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => onClickEdit(deviceType.id)}
-                    >
+                    <DropdownMenuItem onClick={() => onClickEdit(deviceType.id)}>
                       <Edit className="mr-2 h-4 w-4" />
-                      Edit
+                      Editar
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setDeviceTypeToDelete(deviceType.id)}
                       className="text-red-600"
                     >
                       <Trash className="mr-2 h-4 w-4" />
-                      Delete
+                      Excluir
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -146,19 +142,19 @@ export default function DeviceTypeTable({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              device type. Any devices using this type may be affected.
+              Esta ação não pode ser desfeita. O tipo de dispositivo será excluído
+              permanentemente e dispositivos vinculados podem ser afetados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700"
             >
-              Delete
+              Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -52,9 +52,7 @@ export default function LocationTable({
   onRefresh,
   onClickEdit
 }: LocationTableProps) {
-  const [locationToDelete, setLocationToDelete] = useState<string | null>(
-    null
-  )
+  const [locationToDelete, setLocationToDelete] = useState<string | null>(null)
 
   const { mutate: deleteLocation } = useDeleteLocation()
 
@@ -75,7 +73,7 @@ export default function LocationTable({
   }
 
   if (locations.length === 0) {
-    return <div className="text-center py-4">No locations found</div>
+    return <div className="text-center py-4">Nenhuma localização encontrada</div>
   }
 
   return (
@@ -83,11 +81,11 @@ export default function LocationTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Address</TableHead>
-            <TableHead>Devices</TableHead>
-            <TableHead>Last Updated</TableHead>
-            <TableHead className="w-[80px]">Actions</TableHead>
+            <TableHead>Nome</TableHead>
+            <TableHead>Endereço</TableHead>
+            <TableHead>Dispositivos</TableHead>
+            <TableHead>Última Atualização</TableHead>
+            <TableHead className="w-[80px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -95,7 +93,7 @@ export default function LocationTable({
             <TableRow key={location.id}>
               <TableCell className="font-medium">{location.name}</TableCell>
               <TableCell>
-                {location.address || <span className="text-muted-foreground text-sm">Not specified</span>}
+                {location.address || <span className="text-muted-foreground text-sm">Não especificado</span>}
               </TableCell>
               <TableCell>{location._count?.devices || 0}</TableCell>
               <TableCell>{dayJs(location.updatedAt).fromNow()}</TableCell>
@@ -107,18 +105,16 @@ export default function LocationTable({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => onClickEdit(location.id)}
-                    >
+                    <DropdownMenuItem onClick={() => onClickEdit(location.id)}>
                       <Edit className="mr-2 h-4 w-4" />
-                      Edit
+                      Editar
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setLocationToDelete(location.id)}
                       className="text-red-600"
                     >
                       <Trash className="mr-2 h-4 w-4" />
-                      Delete
+                      Excluir
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -134,19 +130,19 @@ export default function LocationTable({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              location. Any devices associated with this location may be affected.
+              Esta ação não pode ser desfeita. Isso excluirá permanentemente a localização.
+              Dispositivos associados a ela podem ser afetados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700"
             >
-              Delete
+              Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

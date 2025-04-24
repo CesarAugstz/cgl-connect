@@ -16,7 +16,7 @@ import {
 import { Switch } from '@/components/ui/switch'
 
 export const dashboardFormSchema = z.object({
-  name: z.string().min(3, { message: 'Name must be at least 3 characters.' }),
+  name: z.string().min(3, { message: 'O nome deve ter pelo menos 3 caracteres.' }),
   description: z.string().optional(),
   isPublic: z.boolean().default(false),
 })
@@ -53,15 +53,15 @@ export default function DashboardFormFields({
       >
         <FormText
           name="name"
-          label="Name"
-          placeholder="Enter dashboard name"
+          label="Nome"
+          placeholder="Digite o nome do painel"
           required
         />
 
         <FormTextarea
           name="description"
-          label="Description"
-          placeholder="Enter dashboard description"
+          label="Descrição"
+          placeholder="Digite uma descrição para o painel"
         />
 
         <FormField
@@ -70,9 +70,9 @@ export default function DashboardFormFields({
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>Public Dashboard</FormLabel>
+                <FormLabel>Painel Público</FormLabel>
                 <FormDescription>
-                  Make this dashboard accessible to anyone with the link
+                  Torna este painel acessível para qualquer pessoa com o link
                 </FormDescription>
               </div>
               <FormControl>

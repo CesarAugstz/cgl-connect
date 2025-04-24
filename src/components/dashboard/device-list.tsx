@@ -122,7 +122,7 @@ export default function DeviceList() {
             className="bg-amber-50 text-amber-700 border-amber-200 flex items-center gap-1"
           >
             <AlertTriangle className="h-3 w-3" />
-            Unknown
+            Desconhecido
           </Badge>
         )
     }
@@ -141,7 +141,7 @@ export default function DeviceList() {
             onChange={e => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" title="Filtro">
           <Filter className="h-4 w-4" />
         </Button>
       </div>
@@ -155,7 +155,7 @@ export default function DeviceList() {
               <TableHead>Localização</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Última Atividade</TableHead>
-              <TableHead>MQTT Topic</TableHead>
+              <TableHead>Tópico MQTT</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

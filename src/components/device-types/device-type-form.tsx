@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -21,13 +21,12 @@ import {
   useFindUniqueDeviceType,
   useUpdateDeviceType,
 } from '@/lib/zenstack-hooks'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import { extractTopicSuffix, topicSuffixToPath } from '@/lib/mqtt/topicMapping'
+import { topicSuffixToPath } from '@/lib/mqtt/topicMapping'
 import { FormMultiSelect } from '../common/form-mutiple-select'
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  name: z.string().min(2, { message: 'O nome deve ter pelo menos 2 caracteres.' }),
   topicSuffixes: z.array(z.string()),
 })
 
@@ -66,44 +65,38 @@ export default function DeviceTypeForm({
     },
   })
 
-
   const onSubmit = (values: DeviceTypeFormValues) => {
     setIsSubmitting(true)
 
-    const deviceTypeFormattedData = {
+    const payload = {
       name: values.name,
       topicSuffixes: values.topicSuffixes as TopicSuffix[],
     }
 
     if (isEditMode && deviceTypeData) {
       updateDeviceType(
-        {
-          where: { id: deviceTypeData.id },
-          data: deviceTypeFormattedData,
-        },
+        { where: { id: deviceTypeData.id }, data: payload },
         {
           onSuccess: () => {
             setIsSubmitting(false)
             onSuccess()
           },
           onError: error => {
-            console.error('Error updating device type:', error)
+            console.error('Erro ao atualizar tipo de dispositivo:', error)
             setIsSubmitting(false)
           },
         },
       )
     } else {
       createDeviceType(
-        {
-          data: deviceTypeFormattedData,
-        },
+        { data: payload },
         {
           onSuccess: () => {
             setIsSubmitting(false)
             onSuccess()
           },
           onError: error => {
-            console.error('Error creating device type:', error)
+            console.error('Erro ao criar tipo de dispositivo:', error)
             setIsSubmitting(false)
           },
         },
@@ -118,12 +111,12 @@ export default function DeviceTypeForm({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditMode ? 'Edit Device Type' : 'Add New Device Type'}
+            {isEditMode ? 'Editar Tipo de Dispositivo' : 'Novo Tipo de Dispositivo'}
           </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? 'Update the device type information in the form below.'
-              : 'Enter the details for the new device type.'}
+              ? 'Atualize os dados do tipo de dispositivo abaixo.'
+              : 'Preencha as informações para cadastrar um novo tipo de dispositivo.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -133,19 +126,16 @@ export default function DeviceTypeForm({
           </div>
         ) : (
           <FormProvider {...methods}>
-            <form
-              onSubmit={methods.handleSubmit(onSubmit)}
-              className="space-y-6"
-            >
+            <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
               <FormText
                 name="name"
-                label="Name"
-                placeholder="Enter device type name"
+                label="Nome"
+                placeholder="Digite o nome do tipo de dispositivo"
                 required
               />
 
               <div className="space-y-3">
-                <Label>Supported Topics</Label>
+                <Label>Tópicos Suportados</Label>
                 <div className="border rounded-md p-3 space-y-2 max-h-[200px] overflow-y-auto">
                   <FormMultiSelect
                     required
@@ -160,17 +150,17 @@ export default function DeviceTypeForm({
 
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={onClose}>
-                  Cancel
+                  Cancelar
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <LoadingSpinner className="mr-2 h-4 w-4" />
-                      {isEditMode ? 'Updating...' : 'Creating...'}
+                      {isEditMode ? 'Salvando...' : 'Criando...'}
                     </>
                   ) : (
                     <>
-                      {isEditMode ? 'Update Device Type' : 'Create Device Type'}
+                      {isEditMode ? 'Salvar Alterações' : 'Criar Tipo de Dispositivo'}
                     </>
                   )}
                 </Button>

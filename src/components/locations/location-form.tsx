@@ -22,7 +22,7 @@ import {
 } from '@/lib/zenstack-hooks'
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  name: z.string().min(2, { message: 'O nome deve ter pelo menos 2 caracteres.' }),
   address: z.string().optional(),
 })
 
@@ -76,7 +76,7 @@ export default function LocationForm({
             onSuccess()
           },
           onError: error => {
-            console.error('Error updating location:', error)
+            console.error('Erro ao atualizar a localização:', error)
             setIsSubmitting(false)
           },
         },
@@ -92,7 +92,7 @@ export default function LocationForm({
             onSuccess()
           },
           onError: error => {
-            console.error('Error creating location:', error)
+            console.error('Erro ao criar a localização:', error)
             setIsSubmitting(false)
           },
         },
@@ -105,12 +105,12 @@ export default function LocationForm({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditMode ? 'Edit Location' : 'Add New Location'}
+            {isEditMode ? 'Editar Localização' : 'Nova Localização'}
           </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? 'Update the location information in the form below.'
-              : 'Enter the details for the new location.'}
+              ? 'Atualize as informações da localização no formulário abaixo.'
+              : 'Preencha os dados para cadastrar uma nova localização.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -126,30 +126,30 @@ export default function LocationForm({
             >
               <FormText
                 name="name"
-                label="Name"
-                placeholder="Enter location name"
+                label="Nome"
+                placeholder="Digite o nome da localização"
                 required
               />
 
               <FormText
                 name="address"
-                label="Address"
-                placeholder="Enter address (optional)"
+                label="Endereço"
+                placeholder="Digite o endereço (opcional)"
               />
 
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={onClose}>
-                  Cancel
+                  Cancelar
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <LoadingSpinner className="mr-2 h-4 w-4" />
-                      {isEditMode ? 'Updating...' : 'Creating...'}
+                      {isEditMode ? 'Atualizando...' : 'Criando...'}
                     </>
                   ) : (
                     <>
-                      {isEditMode ? 'Update Location' : 'Create Location'}
+                      {isEditMode ? 'Atualizar Localização' : 'Criar Localização'}
                     </>
                   )}
                 </Button>
