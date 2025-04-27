@@ -115,8 +115,8 @@ export default function DeviceTypeForm({
           </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? 'Atualize os dados do tipo de dispositivo abaixo.'
-              : 'Preencha as informações para cadastrar um novo tipo de dispositivo.'}
+              ? 'Atualize as informações do tipo de dispositivo no formulário abaixo.'
+              : 'Digite os detalhes para o novo tipo de dispositivo.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -156,11 +156,11 @@ export default function DeviceTypeForm({
                   {isSubmitting ? (
                     <>
                       <LoadingSpinner className="mr-2 h-4 w-4" />
-                      {isEditMode ? 'Salvando...' : 'Criando...'}
+                      {isEditMode ? 'Atualizando...' : 'Criando...'}
                     </>
                   ) : (
                     <>
-                      {isEditMode ? 'Salvar Alterações' : 'Criar Tipo de Dispositivo'}
+                      {isEditMode ? 'Atualizar Tipo de Dispositivo' : 'Criar Tipo de Dispositivo'}
                     </>
                   )}
                 </Button>

@@ -16,18 +16,19 @@ export function MqttConfigSection({
 }: MqttConfigSectionProps) {
   return (
     <div className="border rounded-md p-4 space-y-4">
-      <h3 className="text-lg font-medium">MQTT Configuration</h3>
+      <h3 className="text-lg font-medium">Configuração MQTT</h3>
 
       <FormText
         name="baseTopic"
-        label="Base Topic"
-        placeholder="e.g., home/livingroom/device1"
-        description="Base topic for this device (e.g., home/livingroom/device1)"
+        label="Tópico Base"
+        placeholder="ex: casa/sala/dispositivo1"
+        description="Tópico base para este dispositivo (ex: casa/sala/dispositivo1)"
+        required
       />
 
       {deviceTypeId && (
         <div>
-          <FormLabel className="block mb-2">Available Topics</FormLabel>
+          <FormLabel className="block mb-2">Tópicos Disponíveis</FormLabel>
           <div className="bg-gray-50 p-3 rounded-md">
             {selectedTopicSuffixes.length > 0 ? (
               <div className="grid grid-cols-2 gap-2">
@@ -39,12 +40,12 @@ export function MqttConfigSection({
               </div>
             ) : (
               <div className="text-sm text-gray-500">
-                No topics available for this device type
+                Nenhum tópico disponível para este tipo de dispositivo
               </div>
             )}
           </div>
           <FormDescription className="mt-2">
-            These topics are determined by the device type and will be automatically configured.
+            Esses tópicos serão determinados pelo tipo de dispositivo e serão configurados automaticamente.
           </FormDescription>
         </div>
       )}

@@ -11,7 +11,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
 import LocationTable from '@/components/locations/location-table'
 
@@ -24,15 +24,15 @@ export default function LocationsPage() {
   const {
     data: locations,
     isLoading,
-    refetch
+    refetch,
   } = useFindManyLocation({
     include: {
       _count: {
         select: {
-          devices: true
-        }
-      }
-    }
+          devices: true,
+        },
+      },
+    },
   })
 
   const handleAddNew = () => {
@@ -53,29 +53,28 @@ export default function LocationsPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Locations Management</h1>
+        <h1 className="text-3xl font-bold">Gerenciamento de Localizações</h1>
         <div className="flex gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => refetch()}
             className="flex items-center gap-1"
           >
             <RefreshCw className="h-4 w-4" />
-            Refresh
+            Atualizar
           </Button>
           <Button onClick={handleAddNew} className="flex items-center gap-1">
             <PlusCircle className="h-4 w-4" />
-            Add New
+            Adicionar
           </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Locations</CardTitle>
+          <CardTitle>Localizações</CardTitle>
           <CardDescription>
-            Manage all your locations from this dashboard.
+            Gerencie todas as suas localizações de IoT a partir deste painel.
           </CardDescription>
         </CardHeader>
 

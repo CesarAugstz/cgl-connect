@@ -195,9 +195,6 @@ importers:
       tailwindcss:
         specifier: ^4
         version: 4.0.9
-      tsc:
-        specifier: ^2.0.4
-        version: 2.0.4
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
@@ -3936,10 +3933,6 @@ packages:
 
   ts-pattern@4.3.0:
     resolution: {integrity: sha512-pefrkcd4lmIVR0LA49Imjf9DYLK8vtWhqBPA3Ya1ir8xCW0O2yjL9dsCVvI7pCodLC5q7smNpEtDR2yVulQxOg==}
-
-  tsc@2.0.4:
-    resolution: {integrity: sha512-fzoSieZI5KKJVBYGvwbVZs/J5za84f2lSTLPYf6AGiIf43tZ3GNrI1QzTLcjtyDDP4aLxd46RTZq1nQxe7+k5Q==}
-    hasBin: true
 
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
@@ -8208,8 +8201,6 @@ snapshots:
       code-block-writer: 11.0.3
 
   ts-pattern@4.3.0: {}
-
-  tsc@2.0.4: {}
 
   tsconfig-paths@3.15.0:
     dependencies:

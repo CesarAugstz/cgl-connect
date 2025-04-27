@@ -33,8 +33,8 @@ export function DeviceRelationsSection({
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <FormSelect
         name="deviceTypeId"
-        label="Device Type"
-        placeholder="Select device type"
+        label="Tipo de Dispositivo"
+        placeholder="Selecione o tipo de dispositivo"
         options={deviceTypeOptions}
         required
         onValueChange={onDeviceTypeChange}
@@ -42,16 +42,16 @@ export function DeviceRelationsSection({
 
       <FormSelect
         name="locationId"
-        label="Location"
-        placeholder="Select location"
+        label="Localização"
+        placeholder="Selecione a localização"
         options={locationOptions}
         includeEmpty={true}
       />
 
       <FormSelect
         name="userId"
-        label="Assigned User"
-        placeholder="Select user"
+        label="Usuário"
+        placeholder="Selecione o usuário"
         options={userOptions}
         includeEmpty={true}
       />

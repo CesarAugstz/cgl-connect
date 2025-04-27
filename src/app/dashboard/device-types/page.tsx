@@ -55,7 +55,6 @@ export default function DeviceTypesPage() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => refetch()}
             className="flex items-center gap-1"
           >
@@ -73,7 +72,7 @@ export default function DeviceTypesPage() {
         <CardHeader>
           <CardTitle>Tipos de Dispositivo</CardTitle>
           <CardDescription>
-            Gerencie todos os tipos de dispositivo neste painel.
+            Gerencie todos os seus tipos de dispositivo a partir deste painel.
           </CardDescription>
         </CardHeader>
 

@@ -66,25 +66,24 @@ export default function DashboardsPage() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => refetch()}
             className="flex items-center gap-1"
           >
             <RefreshCw className="h-4 w-4" />
-            Refresh
+            Atualizar
           </Button>
           <Button onClick={handleAddNew} className="flex items-center gap-1">
             <PlusCircle className="h-4 w-4" />
-            Create Dashboard
+            Criar Dashboard
           </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>My Dashboards</CardTitle>
+          <CardTitle>Meus Dashboards</CardTitle>
           <CardDescription>
-            Manage all your custom dashboards from here.
+            Gerencie todos os seus dashboards de IoT a partir deste painel.
           </CardDescription>
         </CardHeader>
 
@@ -107,10 +106,10 @@ export default function DashboardsPage() {
               {dashboards?.length === 0 && (
                 <div className="col-span-full text-center py-8">
                   <p className="text-muted-foreground mb-4">
-                    You don't have any dashboards yet
+                    Você ainda não possui dashboards.
                   </p>
                   <Button onClick={handleAddNew}>
-                    Create your first dashboard
+                    Criar seu primeiro dashboard
                   </Button>
                 </div>
               )}

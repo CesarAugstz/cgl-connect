@@ -37,7 +37,7 @@ export default function HumidityWidget({ data, size }: HumidityWidgetProps) {
         <CardContent className="p-4 flex flex-col items-center justify-center h-full">
           <Droplets className="h-5 w-5 text-blue-500 mb-1" />
           <div className="text-2xl font-bold">{latestHumidity}%</div>
-          <p className="text-xs text-muted-foreground">Humidity</p>
+          <p className="text-xs text-muted-foreground">Umidade</p>
         </CardContent>
       </Card>
     )
@@ -48,7 +48,7 @@ export default function HumidityWidget({ data, size }: HumidityWidgetProps) {
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
           <Droplets className="h-4 w-4 text-blue-500 mr-2" />
-          Humidity
+          Umidade
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4">
@@ -75,7 +75,7 @@ export default function HumidityWidget({ data, size }: HumidityWidgetProps) {
                   />
                   <Tooltip
                     labelFormatter={(label) => `Time: ${label}`}
-                    formatter={(value) => [`${value}%`, 'Humidity']}
+                    formatter={(value) => [`${value}%`, 'Umidade']}
                   />
                   <Line
                     type="monotone"

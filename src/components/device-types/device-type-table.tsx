@@ -75,7 +75,7 @@ export default function DeviceTypeTable({
   }
 
   if (deviceTypes.length === 0) {
-    return <div className="text-center py-4 text-muted-foreground">Nenhum tipo de dispositivo encontrado</div>
+    return <div className="text-center py-4">Nenhum tipo de dispositivo encontrado</div>
   }
 
   return (
@@ -96,13 +96,12 @@ export default function DeviceTypeTable({
               <TableCell className="font-medium">{deviceType.name}</TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-1">
-                  {deviceType.topicSuffixes.length > 0 ? (
-                    deviceType.topicSuffixes.map(suffix => (
-                      <Badge key={suffix} variant="outline" className="text-xs">
-                        {topicSuffixToPath[suffix]}
-                      </Badge>
-                    ))
-                  ) : (
+                  {deviceType.topicSuffixes.map(suffix => (
+                    <Badge key={suffix} variant="outline" className="text-xs">
+                      {topicSuffixToPath[suffix]}
+                    </Badge>
+                  ))}
+                  {deviceType.topicSuffixes.length === 0 && (
                     <span className="text-muted-foreground text-sm">Nenhum</span>
                   )}
                 </div>
@@ -144,8 +143,8 @@ export default function DeviceTypeTable({
           <AlertDialogHeader>
             <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta ação não pode ser desfeita. O tipo de dispositivo será excluído
-              permanentemente e dispositivos vinculados podem ser afetados.
+              Esta ação não pode ser desfeita. Isso excluirá permanentemente o
+              tipo de dispositivo. Quaisquer dispositivos usando este tipo podem ser afetados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

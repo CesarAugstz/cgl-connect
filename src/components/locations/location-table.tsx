@@ -130,10 +130,11 @@ export default function LocationTable({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
+            <AlertDialogTitle>
+              Confirmar exclusão
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Esta ação não pode ser desfeita. Isso excluirá permanentemente a localização.
-              Dispositivos associados a ela podem ser afetados.
+              Tem certeza que deseja excluir esta localização? Esta ação não pode ser desfeita.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

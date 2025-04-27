@@ -78,12 +78,12 @@ export default function DeviceTable({ devices, onRefresh }: DeviceTableProps) {
       case "OFFLINE":
         return <Badge variant="secondary" className="bg-gray-500">Offline</Badge>;
       default:
-        return <Badge variant="outline">Unknown</Badge>;
+        return <Badge variant="outline">Desconhecido</Badge>;
     }
   };
 
   if (devices.length === 0) {
-    return <div className="text-center py-4">No devices found</div>;
+    return <div className="text-center py-4">Nenhum dispositivo encontrado</div>;
   }
 
   return (
@@ -91,14 +91,14 @@ export default function DeviceTable({ devices, onRefresh }: DeviceTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Location</TableHead>
+            <TableHead>Nome</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>Localização</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Last Updated</TableHead>
-            <TableHead>Owner</TableHead>
-            <TableHead>Base Topic</TableHead>
-            <TableHead className="w-[80px]">Actions</TableHead>
+            <TableHead>Última Atualização</TableHead>
+            <TableHead>Proprietário</TableHead>
+            <TableHead>Tópico Base</TableHead>
+            <TableHead className="w-[80px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -123,14 +123,14 @@ export default function DeviceTable({ devices, onRefresh }: DeviceTableProps) {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => setEditingDevice(device)}>
                         <Edit className="mr-2 h-4 w-4" />
-                        Edit
+                        Editar
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         onClick={() => setDeviceToDelete(device.id)}
                         className="text-red-600"
                       >
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete
+                        Excluir
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -156,16 +156,16 @@ export default function DeviceTable({ devices, onRefresh }: DeviceTableProps) {
       <AlertDialog open={!!deviceToDelete} onOpenChange={(open) => !open && setDeviceToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the device
-              and all associated data.
+              Esta ação não pode ser desfeita. Isso excluirá permanentemente o dispositivo
+              e todos os dados associados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
-              Delete
+              Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

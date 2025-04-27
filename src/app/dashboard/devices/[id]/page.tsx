@@ -90,12 +90,12 @@ export default function DeviceDetailPage() {
           <CardHeader>
             <CardTitle>Dispositivo Não Encontrado</CardTitle>
             <CardDescription>
-              O dispositivo que você procura não existe ou foi removido.
+              O dispositivo que você está procurando não existe ou foi removido.
             </CardDescription>
           </CardHeader>
           <CardFooter>
             <Button onClick={() => router.push('/dashboard/devices')}>
-              Voltar para a Lista de Dispositivos
+              Retornar à Lista de Dispositivos
             </Button>
           </CardFooter>
         </Card>
@@ -169,7 +169,7 @@ export default function DeviceDetailPage() {
           <CardContent className="space-y-4">
             <div>
               <div className="text-sm font-medium text-gray-500">
-                Tipo do Dispositivo
+                Tipo de Dispositivo
               </div>
               <div>{device.deviceType.name}</div>
             </div>
@@ -212,7 +212,7 @@ export default function DeviceDetailPage() {
             </div>
 
             <div>
-              <div className="text-sm font-medium text-gray-500">Criado</div>
+              <div className="text-sm font-medium text-gray-500">Criado em</div>
               <div>
                 {dayJs(device.createdAt).format('DD [de] MMMM [de] YYYY HH:mm:ss')}
               </div>
@@ -318,7 +318,8 @@ export default function DeviceDetailPage() {
                       >
                         <div className="flex justify-between items-center mb-2">
                           <div className="font-medium">
-                            Alerta {alert.severity}
+                            Alerta {alert.severity === 'HIGH' ? 'Alto' : 
+                                   alert.severity === 'MEDIUM' ? 'Médio' : 'Baixo'}
                           </div>
                           <div className="text-sm text-gray-500">
                             {dayJs(alert.createdAt).format('DD/MM/YYYY HH:mm:ss')}
@@ -382,7 +383,7 @@ export default function DeviceDetailPage() {
                         variant="destructive"
                         className="w-full justify-start"
                       >
-                        Restaurar Padrões de Fábrica
+                        Restaurar Configurações de Fábrica
                       </Button>
                     </div>
                   </div>

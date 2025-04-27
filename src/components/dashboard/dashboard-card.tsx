@@ -41,11 +41,11 @@ export default function DashboardCard({ dashboard, onEdit, onShare }: DashboardC
             <CardTitle className="flex items-center gap-2">
               {dashboard.name}
               {dashboard.isPublic && (
-                <Badge variant="outline" className="text-xs">Public</Badge>
+                <Badge variant="outline" className="text-xs">Público</Badge>
               )}
             </CardTitle>
             <CardDescription>
-              {dashboard.description || 'No description provided'}
+              {dashboard.description || 'Nenhuma descrição fornecida'}
             </CardDescription>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function DashboardCard({ dashboard, onEdit, onShare }: DashboardC
       <CardContent className="flex-grow">
         <div className="text-sm">
           <p className="text-muted-foreground">
-            Devices: {dashboard._count?.devices || 0}
+            Dispositivos: {dashboard._count?.devices || 0}
           </p>
         </div>
       </CardContent>
@@ -66,7 +66,7 @@ export default function DashboardCard({ dashboard, onEdit, onShare }: DashboardC
           onClick={() => router.push(`/dashboard/${dashboard.id}`)}
         >
           <ExternalLink className="mr-2 h-4 w-4" />
-          View
+          Visualizar
         </Button>
         
         <div className="flex gap-2">

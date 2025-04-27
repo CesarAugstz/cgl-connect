@@ -46,7 +46,6 @@ export default function DevicesPage() {
         <div className="flex gap-2">
           <Button 
             variant="outline" 
-            size="sm" 
             onClick={() => refetch()}
             className="flex items-center gap-1"
           >
@@ -78,7 +77,7 @@ export default function DevicesPage() {
             className="mb-6"
           >
             <TabsList>
-              <TabsTrigger value="all">Todos os Dispositivos</TabsTrigger>
+              <TabsTrigger value="all">Todos Dispositivos</TabsTrigger>
               <TabsTrigger value="online">Online</TabsTrigger>
               <TabsTrigger value="offline">Offline</TabsTrigger>
               <TabsTrigger value="unknown">Desconhecido</TabsTrigger>

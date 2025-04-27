@@ -96,10 +96,10 @@ export default function UserTable({
         <TableHeader>
           <TableRow>
             <TableHead>Nome</TableHead>
-            <TableHead>E-mail</TableHead>
+            <TableHead>Email</TableHead>
             <TableHead>Função</TableHead>
             <TableHead>Dispositivos</TableHead>
-            <TableHead>Última atualização</TableHead>
+            <TableHead>Última Atualização</TableHead>
             <TableHead className="w-[80px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -107,7 +107,7 @@ export default function UserTable({
           {users.map(user => (
             <TableRow key={user.id}>
               <TableCell className="font-medium">
-                {user.name || <span className="text-muted-foreground italic">Não informado</span>}
+                {user.name || <span className="text-muted-foreground italic">Não definido</span>}
               </TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>
@@ -126,14 +126,14 @@ export default function UserTable({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => onClickEdit(user.id)}>
-                      <Edit className="mr-2 h-4 w-4" />
+                      <Edit className="h-4 w-4 mr-2" />
                       Editar
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setUserToDelete(user.id)}
                       className="text-red-600"
                     >
-                      <Trash className="mr-2 h-4 w-4" />
+                      <Trash className="h-4 w-4 mr-2" />
                       Excluir
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -152,7 +152,8 @@ export default function UserTable({
           <AlertDialogHeader>
             <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta ação não poderá ser desfeita. Isso excluirá permanentemente o usuário e todos os dados associados.
+              Esta ação não pode ser desfeita. Isso excluirá permanentemente o usuário
+              e removerá seus dados de nossos servidores.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -6,15 +6,15 @@ export function DeviceBasicInfoSection() {
     <>
       <FormText
         name="name"
-        label="Name"
-        placeholder="Enter device name"
+        label="Nome"
+        placeholder="Digite o nome do dispositivo"
         required
       />
 
       <FormTextarea
         name="description"
-        label="Description"
-        placeholder="Enter device description (optional)"
+        label="Descrição"
+        placeholder="Digite a descrição do dispositivo (opcional)"
       />
     </>
   )

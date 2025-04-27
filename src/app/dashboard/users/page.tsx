@@ -51,29 +51,28 @@ export default function UsersPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Users Management</h1>
+        <h1 className="text-3xl font-bold">Gerenciamento de Usuários</h1>
         <div className="flex gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => refetch()}
             className="flex items-center gap-1"
           >
             <RefreshCw className="h-4 w-4" />
-            Refresh
+            Atualizar
           </Button>
           <Button onClick={handleAddNew} className="flex items-center gap-1">
             <PlusCircle className="h-4 w-4" />
-            Add New
+            Adicionar Novo
           </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Users</CardTitle>
+          <CardTitle>Usuários</CardTitle>
           <CardDescription>
-            Manage all your users from this dashboard.
+            Gerencie todos os seus usuários a partir deste painel.
           </CardDescription>
         </CardHeader>
 
