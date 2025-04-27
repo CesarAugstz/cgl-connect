@@ -22,7 +22,7 @@ import {
 } from '@/lib/zenstack-hooks'
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'O nome deve ter pelo menos 2 caracteres.' }),
+  name: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres.' }),
   address: z.string().optional(),
 })
 
@@ -76,7 +76,7 @@ export default function LocationForm({
             onSuccess()
           },
           onError: error => {
-            console.error('Erro ao atualizar a localização:', error)
+            console.error('Erro ao atualizar localização:', error)
             setIsSubmitting(false)
           },
         },
@@ -92,7 +92,7 @@ export default function LocationForm({
             onSuccess()
           },
           onError: error => {
-            console.error('Erro ao criar a localização:', error)
+            console.error('Erro ao criar localização:', error)
             setIsSubmitting(false)
           },
         },
@@ -110,7 +110,7 @@ export default function LocationForm({
           <DialogDescription>
             {isEditMode
               ? 'Atualize as informações da localização no formulário abaixo.'
-              : 'Preencha os dados para cadastrar uma nova localização.'}
+              : 'Digite os detalhes para a nova localização.'}
           </DialogDescription>
         </DialogHeader>
 

@@ -114,10 +114,10 @@ export default function DashboardDetailPage({ params }: any){
             <div className="flex flex-col items-center justify-center border border-dashed rounded-lg p-12 mt-8">
               <LayoutGrid className="h-16 w-16 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium mb-2">Essa dashboard está vazia </h3>
-              <p className="text-muted-foreground mb-6">Add dispositivos a esta dashboard</p>
+              <p className="text-muted-foreground mb-6">Adicione dispositivos a esta dashboard</p>
               <Button onClick={() => setIsAddDeviceModalOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Add Seu Primeiro Dispositivo
+                Adicionar Primeiro Dispositivo
               </Button>
             </div>
           ) : (
@@ -153,9 +153,9 @@ export default function DashboardDetailPage({ params }: any){
           <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Irá deletar a dashboard <strong>{dashboard.name}</strong> e todos os dispositivos associados a ela. Essa ação não pode ser desfeita.
+                  Isso excluirá permanentemente o dashboard e removerá todas as associações com dispositivos.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -164,7 +164,7 @@ export default function DashboardDetailPage({ params }: any){
                   onClick={handleDeleteDashboard}
                   className="bg-destructive text-destructive-foreground"
                 >
-                  Deletar
+                  Excluir
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -172,7 +172,7 @@ export default function DashboardDetailPage({ params }: any){
         </>
       ) : (
         <div className="text-center py-8">
-          <p>Dashboard não encontrada ou você não tem acesso</p>
+          <p>Dashboard não encontrado ou você não tem acesso a ele.</p>
           <Button 
             variant="link" 
             onClick={() => router.push('/dashboard')}

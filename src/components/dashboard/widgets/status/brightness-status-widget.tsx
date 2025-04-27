@@ -49,7 +49,7 @@ export default function BrightnessStatusWidget({ data, size }: BrightnessStatusW
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
           <SunIcon className="h-4 w-4 text-amber-500 mr-2" />
-          Brightness
+          Brilho
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4">

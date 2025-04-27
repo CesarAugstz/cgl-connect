@@ -69,13 +69,13 @@ export default function DeviceActivityMenu({
           </Badge>
         )
       default:
-        return <Badge variant="outline">Unknown</Badge>
+        return <Badge variant="outline">Desconhecido</Badge>
     }
   }
 
   const getLastActivity = () => {
     if (!device?.telemetry || device.telemetry.length === 0) {
-      return 'No activity recorded'
+      return 'Nenhuma atividade registrada'
     }
 
     const lastActivity = device.telemetry[0].receivedAt
@@ -103,9 +103,9 @@ export default function DeviceActivityMenu({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Device Activity</DialogTitle>
+          <DialogTitle>Atividade do Dispositivo</DialogTitle>
           <DialogDescription>
-            Monitor connection status and recent activity for this device.
+            Visualize as informações mais recentes do dispositivo
           </DialogDescription>
         </DialogHeader>
 

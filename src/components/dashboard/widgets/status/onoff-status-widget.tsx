@@ -41,7 +41,7 @@ export default function OnOffStatusWidget({ data, size }: OnOffStatusWidgetProps
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
           <PowerIcon className={`h-4 w-4 ${isOn ? 'text-green-500' : 'text-slate-400'} mr-2`} />
-          Power Status
+          Status de Energia
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4">
@@ -49,7 +49,7 @@ export default function OnOffStatusWidget({ data, size }: OnOffStatusWidgetProps
           <div className="flex items-center mb-4">
             <span className="text-2xl font-bold">{isOn ? 'ON' : 'OFF'}</span>
             <span className="ml-2 text-xs text-muted-foreground">
-              {data.length > 0 && `Last updated ${dayJs(data[0].receivedAt).fromNow()}`}
+              {data.length > 0 && `Última atualização ${dayJs(data[0].receivedAt).fromNow()}`}
             </span>
           </div>
           

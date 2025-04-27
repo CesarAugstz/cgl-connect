@@ -16,7 +16,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { FormText } from '@/components/ui/form-fields/form-text'
 import LoadingSpinner from '@/components/loading-spinner'
-import { useCreateUser, useFindUniqueUser, useUpdateUser } from '@/lib/zenstack-hooks'
+import {
+  useCreateUser,
+  useFindUniqueUser,
+  useUpdateUser,
+} from '@/lib/zenstack-hooks'
 import {
   Select,
   SelectContent,
@@ -80,8 +84,6 @@ export default function UserForm({
       role: userData?.role || 'USER',
     },
   })
-
-  console.log(`user role is ${userData?.role}`)
 
   const onSubmit = (values: UserFormValues) => {
     setIsSubmitting(true)
@@ -157,11 +159,13 @@ export default function UserForm({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Edit User' : 'Add New User'}</DialogTitle>
+          <DialogTitle>
+            {isEditMode ? 'Editar Usuário' : 'Criar Novo Usuário'}
+          </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? 'Update the user information in the form below.'
-              : 'Enter the details for the new user.'}
+              ? 'Edite os detalhes do usuário abaixo.'
+              : 'Preencha os detalhes para criar um novo usuário.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -177,26 +181,25 @@ export default function UserForm({
             >
               <FormText
                 name="name"
-                label="Name"
-                placeholder="Enter user's name"
+                label="Nome"
+                placeholder="Digite o nome do usuário"
               />
 
               <FormText
                 name="email"
                 label="Email"
-                placeholder="Enter email address"
-                required
+                placeholder="Digite o email do usuário"
               />
 
               <FormText
                 name="password"
                 label={
                   isEditMode
-                    ? 'Password (leave empty to keep current)'
-                    : 'Password'
+                    ? 'Senha (Deixe em branco para manter a atual)'
+                    : 'Senha'
                 }
                 placeholder={
-                  isEditMode ? 'Enter new password' : 'Enter password'
+                  isEditMode ? 'Digite a nova senha' : 'Digite a senha'
                 }
                 type="password"
                 required={!isEditMode}
@@ -207,35 +210,47 @@ export default function UserForm({
                 name="role"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
+                    <FormLabel>Função</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue />
                         </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="USER">User</SelectItem>
-                        <SelectItem value="ADMIN">Admin</SelectItem>
-                      </SelectContent>
-                    </Select>
+                        <SelectContent>
+                          <SelectItem value={Role.USER}>Usuário</SelectItem>
+                          <SelectItem value={Role.ADMIN}>
+                            Administrador
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
               <DialogFooter>
-                <Button type="button" variant="outline" onClick={onClose}>
-                  Cancel
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onClose}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <LoadingSpinner className="mr-2 h-4 w-4" />
-                      {isEditMode ? 'Updating...' : 'Creating...'}
+                      {isEditMode ? 'Salvando...' : 'Criando...'}
                     </>
+                  ) : isEditMode ? (
+                    'Salvar'
                   ) : (
-                    <>{isEditMode ? 'Update User' : 'Create User'}</>
+                    'Criar'
                   )}
                 </Button>
               </DialogFooter>

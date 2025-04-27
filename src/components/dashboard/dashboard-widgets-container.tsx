@@ -36,7 +36,7 @@ export default function DashboardWidgetsContainer({ dashboardId }: DashboardWidg
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Devices</h2>
+        <h2 className="text-2xl font-bold">Dispositivos</h2>
         <div className="flex gap-2">
           {isEditMode ? (
             <Button 
@@ -45,7 +45,7 @@ export default function DashboardWidgetsContainer({ dashboardId }: DashboardWidg
               className="flex items-center gap-1"
             >
               <Check className="h-4 w-4" />
-              Done
+              Concluído
             </Button>
           ) : (
             <Button 
@@ -54,7 +54,7 @@ export default function DashboardWidgetsContainer({ dashboardId }: DashboardWidg
               className="flex items-center gap-1"
             >
               <Pencil className="h-4 w-4" />
-              Edit Layout
+              Editar Layout
             </Button>
           )}
           
@@ -63,7 +63,7 @@ export default function DashboardWidgetsContainer({ dashboardId }: DashboardWidg
             className="flex items-center gap-1"
           >
             <PlusIcon className="h-4 w-4" />
-            Add Device
+            Adicionar Dispositivo
           </Button>
         </div>
       </div>
@@ -76,13 +76,13 @@ export default function DashboardWidgetsContainer({ dashboardId }: DashboardWidg
         <>
           {(!dashboardDevices || dashboardDevices.length === 0) ? (
             <div className="text-center py-12 border rounded-lg bg-muted/10">
-              <h3 className="text-lg font-medium mb-2">No devices added yet</h3>
+              <h3 className="text-lg font-medium mb-2">Nenhum dispositivo adicionado ainda</h3>
               <p className="text-muted-foreground mb-6">
-                Add devices to this dashboard to monitor and control them
+                Adicione dispositivos a este dashboard para monitorá-los e controlá-los
               </p>
               <Button onClick={() => setIsAddingDevice(true)}>
                 <PlusIcon className="h-4 w-4 mr-2" />
-                Add your first device
+                Adicione seu primeiro dispositivo
               </Button>
             </div>
           ) : (

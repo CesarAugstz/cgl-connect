@@ -47,12 +47,12 @@ export default function DeviceForm({
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {isEditMode ? 'Edit Device' : 'Add New Device'}
+            {isEditMode ? 'Editar Dispositivo' : 'Adicionar Novo Dispositivo'}
           </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? 'Update the device information in the form below.'
-              : 'Enter the details for the new device.'}
+              ? 'Atualize as informações do dispositivo no formulário abaixo.'
+              : 'Insira os detalhes para o novo dispositivo.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -79,16 +79,16 @@ export default function DeviceForm({
 
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={onClose}>
-                  Cancel
+                  Cancelar
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <LoadingSpinner className="mr-2 h-4 w-4" />
-                      {isEditMode ? 'Updating...' : 'Creating...'}
+                      {isEditMode ? 'Atualizando...' : 'Criando...'}
                     </>
                   ) : (
-                    <>{isEditMode ? 'Update Device' : 'Create Device'}</>
+                    <>{isEditMode ? 'Atualizar Dispositivo' : 'Criar Dispositivo'}</>
                   )}
                 </Button>
               </DialogFooter>

@@ -95,11 +95,11 @@ export default function AddDeviceToDashboardModal({
           setSelectedDevice(null)
           setWidgetSize('MEDIUM')
           setSearchQuery('')
-          toast.success('Device added to dashboard')
+          toast.success('Dispositivo adicionado ao dashboard')
           onSuccess()
         },
         onError: error => {
-          console.error('Error adding device to dashboard:', error)
+          console.error('Erro ao adicionar dispositivo ao dashboard:', error)
           setIsSubmitting(false)
           toast.exception(error)
         },
@@ -117,9 +117,9 @@ export default function AddDeviceToDashboardModal({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Add Device to Dashboard</DialogTitle>
+          <DialogTitle>Adicionar Dispositivo ao Dashboard</DialogTitle>
           <DialogDescription>
-            Select a device to add to your dashboard
+            Selecione um dispositivo para adicionar ao seu dashboard
           </DialogDescription>
         </DialogHeader>
 
@@ -133,7 +133,7 @@ export default function AddDeviceToDashboardModal({
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-500" />
                 <Input
-                  placeholder="Search devices..."
+                  placeholder="Pesquisar dispositivos..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className="pl-8"
@@ -143,7 +143,7 @@ export default function AddDeviceToDashboardModal({
               <div className="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-1">
                 {filteredDevices?.length === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
-                    No devices found matching your search
+                    Nenhum dispositivo encontrado para sua pesquisa
                   </div>
                 )}
 
@@ -161,8 +161,8 @@ export default function AddDeviceToDashboardModal({
                       <div>
                         <CardTitle className="text-base">{device.name}</CardTitle>
                         <CardDescription className="text-xs">
-                          Type: {device.deviceType.name}
-                          {device.location && ` • Location: ${device.location.name}`}
+                          Tipo: {device.deviceType.name}
+                          {device.location && ` • Localização: ${device.location.name}`}
                         </CardDescription>
                       </div>
                       {getStatusIcon(device.status)}
@@ -173,19 +173,18 @@ export default function AddDeviceToDashboardModal({
 
               {selectedDevice && (
                 <div className="space-y-2 border-t pt-4">
-                  <Label htmlFor="widgetSize">Widget Size</Label>
+                  <Label htmlFor="widgetSize">Tamanho do Widget</Label>
                   <Select
-                    //id="widgetSize"
                     value={widgetSize}
                     onValueChange={value => setWidgetSize(value as WidgetSize)}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select size" />
+                      <SelectValue placeholder="Selecione o tamanho" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="SMALL">Small</SelectItem>
-                      <SelectItem value="MEDIUM">Medium</SelectItem>
-                      <SelectItem value="LARGE">Large</SelectItem>
+                      <SelectItem value="SMALL">Pequeno</SelectItem>
+                      <SelectItem value="MEDIUM">Médio</SelectItem>
+                      <SelectItem value="LARGE">Grande</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -194,7 +193,7 @@ export default function AddDeviceToDashboardModal({
 
             <DialogFooter className="mt-6">
               <Button variant="outline" onClick={onClose}>
-                Cancel
+                Cancelar
               </Button>
               <Button
                 onClick={handleAddDevice}
@@ -203,10 +202,10 @@ export default function AddDeviceToDashboardModal({
                 {isSubmitting ? (
                   <>
                     <LoadingSpinner className="mr-2 h-4 w-4" />
-                    Adding...
+                    Adicionando...
                   </>
                 ) : (
-                  'Add to Dashboard'
+                  'Adicionar ao Dashboard'
                 )}
               </Button>
             </DialogFooter>
