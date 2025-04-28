@@ -30,13 +30,17 @@ export class MqttService extends EventEmitter {
   constructor(options: MqttServiceOptions) {
     super()
 
+    console.log(`new mqtt client on:`, {
+      url: options.brokerUrl,
+    })
+
     this.client = new MqttClient(options.brokerUrl, {
       clientId:
         options.clientId ||
         `cgl-connect-${Math.random().toString(16).substring(2, 10)}`,
       username: options.username,
       password: options.password,
-      reconnectPeriod: 5000
+      reconnectPeriod: 5000,
     })
 
     this.setupEventHandlers()
@@ -101,20 +105,20 @@ export class MqttService extends EventEmitter {
           deviceId,
           topicSuffix,
           data: data as Prisma.InputJsonValue,
-          receivedAt: new Date()
-        }
+          receivedAt: new Date(),
+        },
       })
 
       await db.device.update({
         where: { id: deviceId },
-        data: { status: 'ONLINE' as DeviceStatus }
+        data: { status: 'ONLINE' as DeviceStatus },
       })
 
       this.emit('telemetry', {
         deviceId,
         topicSuffix,
         topic: message.topic,
-        data
+        data,
       })
     } catch (error) {
       console.error('Error handling MQTT message:', error)
@@ -154,8 +158,8 @@ export class MqttService extends EventEmitter {
 
       const devices = await db.device.findMany({
         include: {
-          deviceType: true
-        }
+          deviceType: true,
+        },
       })
 
       console.log(`Found ${devices.length} devices to configure`)
@@ -174,12 +178,12 @@ export class MqttService extends EventEmitter {
           const fullTopic = this.buildFullTopic(baseTopic, suffix)
           this.topicToDeviceMap.set(fullTopic, {
             deviceId: id,
-            topicSuffix: suffix
+            topicSuffix: suffix,
           })
 
           await this.client.subscribe(fullTopic)
           console.log(
-            `Subscribed to topic: ${fullTopic} for device: ${device.name}`
+            `Subscribed to topic: ${fullTopic} for device: ${device.name}`,
           )
         }
       }
@@ -214,11 +218,11 @@ export class MqttService extends EventEmitter {
           status: true,
           telemetry: {
             orderBy: {
-              receivedAt: 'desc'
+              receivedAt: 'desc',
             },
-            take: 1
-          }
-        }
+            take: 1,
+          },
+        },
       })
 
       for (const device of devices) {
@@ -237,7 +241,7 @@ export class MqttService extends EventEmitter {
         if (device.status !== newStatus) {
           await db.device.update({
             where: { id: device.id },
-            data: { status: newStatus }
+            data: { status: newStatus },
           })
           console.log(`Updated device ${device.id} status to ${newStatus}`)
         }
@@ -254,11 +258,11 @@ export class MqttService extends EventEmitter {
   public async publishToDeviceTopic(
     deviceId: string,
     topicSuffix: TopicSuffix,
-    message: any
+    message: any,
   ): Promise<void> {
     try {
       const device = await db.device.findUnique({
-        where: { id: deviceId }
+        where: { id: deviceId },
       })
 
       if (!device || !device.baseTopic) {
