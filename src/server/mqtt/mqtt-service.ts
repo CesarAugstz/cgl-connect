@@ -132,7 +132,7 @@ export class MqttService extends EventEmitter {
 
     this._isRunning = true
 
-    await this.loadAndSubscribe()
+    this.loadAndSubscribe()
 
     setInterval(async () => {
       await this.loadAndSubscribe()

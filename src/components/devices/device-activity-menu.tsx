@@ -9,14 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter
+  DialogFooter,
 } from '@/components/ui/dialog'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ActivityIcon, RefreshCw } from 'lucide-react'
 import LoadingSpinner from '@/components/loading-spinner'
@@ -30,7 +25,7 @@ interface DeviceActivityMenuProps {
 }
 
 export default function DeviceActivityMenu({
-  deviceId
+  deviceId,
 }: DeviceActivityMenuProps) {
   const [open, setOpen] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
@@ -38,17 +33,17 @@ export default function DeviceActivityMenu({
   const {
     data: device,
     isLoading,
-    refetch
+    refetch,
   } = useFindUniqueDevice({
     where: { id: deviceId },
     include: {
       telemetry: {
         orderBy: {
-          receivedAt: 'desc'
+          receivedAt: 'desc',
         },
-        take: 5
-      }
-    }
+        take: 5,
+      },
+    },
   })
 
   const handleRefresh = async () => {
@@ -79,11 +74,6 @@ export default function DeviceActivityMenu({
 
     const lastActivity = device.telemetry[0].receivedAt
     return dayJs(lastActivity).fromNow()
-  }
-
-  // Function to get display name for topic suffix
-  const getTopicDisplayName = (suffix: TopicSuffix) => {
-    return suffix.toLowerCase().replace('_', ' ')
   }
 
   // Function to get full topic path
@@ -175,12 +165,12 @@ export default function DeviceActivityMenu({
                             Topic:{' '}
                             {getFullTopicPath(
                               device.baseTopic,
-                              item.topicSuffix
+                              item.topicSuffix,
                             )}
                           </span>
                           <span>
                             {dayJs(item.receivedAt).format(
-                              'MMM D, YYYY HH:mm:ss'
+                              'MMM D, YYYY HH:mm:ss',
                             )}
                           </span>
                         </div>
