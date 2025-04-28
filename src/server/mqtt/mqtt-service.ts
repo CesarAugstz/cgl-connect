@@ -87,7 +87,9 @@ export class MqttService extends EventEmitter {
     try {
       const deviceInfo = this.topicToDeviceMap.get(message.topic)
       if (!deviceInfo) {
-        console.warn(`Received message for unknown topic: ${message.topic}`)
+        console.warn(
+          `Received message for unknown topic: ${message.topic}. Topics available: ${Array.from(this.topicToDeviceMap.keys())}`,
+        )
         return
       }
 
