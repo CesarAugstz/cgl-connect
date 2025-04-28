@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form'
 import { TopicSuffix } from '@prisma/client'
 import { FormLabel, FormDescription } from '@/components/ui/form'
 import { topicSuffixToPath } from '@/lib/mqtt/topicMapping'

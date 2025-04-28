@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { PlusIcon, Pencil, Check } from 'lucide-react'
 import DeviceWidget from './device-widget'
 import LoadingSpinner from '@/components/loading-spinner'
-import { WidgetSize } from '@prisma/client'
 import { useFindManyDashboardDevice } from '@/lib/zenstack-hooks'
 import AddDeviceToDashboardDialog from './add-device-to-dashboard-dialog'
 

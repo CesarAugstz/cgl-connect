@@ -1,4 +1,4 @@
-import { getCurrentUser, getServerAuthSession } from "@/server/auth";
+import { getCurrentUser } from "@/server/auth";
 import { db } from "@/server/db";
 import { enhance } from "@zenstackhq/runtime";
 import { NextRequestHandler } from "@zenstackhq/server/next";
