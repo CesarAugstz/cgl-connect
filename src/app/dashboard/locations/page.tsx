@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Plus, PlusCircle, RefreshCw } from 'lucide-react'
+import { PlusCircle, RefreshCw } from 'lucide-react'
 import { useFindManyLocation } from '@/lib/zenstack-hooks'
 import LocationForm from '@/components/locations/location-form'
 import LoadingSpinner from '@/components/loading-spinner'

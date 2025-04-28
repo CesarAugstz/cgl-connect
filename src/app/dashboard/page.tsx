@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { PlusCircle, RefreshCw, Share2 } from 'lucide-react'
+import { PlusCircle, RefreshCw } from 'lucide-react'
 import { useFindManyDashboard } from '@/lib/zenstack-hooks'
 import LoadingSpinner from '@/components/loading-spinner'
 import DashboardForm from '@/components/dashboard/dashboard-form'

@@ -1,8 +1,7 @@
 'use client'
 
-import { Bell, Search, User } from 'lucide-react'
+import { Bell } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/theme-toggle'
 import UserDropdown from './user-dropdown/user-dropdown'
 

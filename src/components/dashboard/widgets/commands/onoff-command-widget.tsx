@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { PowerIcon } from 'lucide-react'
 import { useToast } from '@/lib/hooks/toast'
+import { publishMqtt } from './actions'
 
 interface OnOffCommandWidgetProps {
   deviceId: string
@@ -19,14 +20,16 @@ export default function OnOffCommandWidget({ deviceId, size }: OnOffCommandWidge
   const handleToggle = async (newState: boolean) => {
     setIsSubmitting(true)
     try {
-      // Mock sending command to device
-      await new Promise(resolve => setTimeout(resolve, 800))
+      const result = await publishMqtt(deviceId, 'COMMAND_ONOFF', {
+        state: newState ? 'on' : 'off'
+      })
       
-      setIsOn(newState)
-      toast.success(`Command sent: Turn ${newState ? 'ON' : 'OFF'}`)
-      
-      // Ideally, here we would publish to MQTT topic:
-      // mqttClient.publish(`${deviceBaseTopic}/command/onoff`, { state: newState })
+      if (result.success) {
+        setIsOn(newState)
+        toast.success(`Command sent: Turn ${newState ? 'ON' : 'OFF'}`)
+      } else {
+        throw new Error(result.error)
+      }
     } catch (error) {
       console.error('Error sending command', error)
       toast.error('Failed to send command to device')

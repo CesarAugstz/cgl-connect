@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, AlertTriangle, Thermometer, WifiOff, Zap } from "lucide-react";
+import { Thermometer, WifiOff, Zap } from "lucide-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/pt-br";

@@ -1,6 +1,6 @@
 'use client'
 
-import { LogOut, User as UserIcon } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import {
   DropdownMenu,

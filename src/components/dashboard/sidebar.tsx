@@ -6,8 +6,6 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   LayoutDashboard,
-  Bell,
-  BarChart,
   Settings,
   Users,
   Library,

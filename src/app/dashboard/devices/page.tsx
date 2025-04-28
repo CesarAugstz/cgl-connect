@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { PlusCircle, RefreshCw } from "lucide-react";
 import { DeviceStatus } from "@prisma/client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DeviceTable from "@/components/devices/device-table";
 import DeviceForm from "@/components/devices/device-form";
 import LoadingSpinner from "@/components/loading-spinner";
