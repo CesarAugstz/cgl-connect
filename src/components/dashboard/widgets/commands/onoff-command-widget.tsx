@@ -12,7 +12,10 @@ interface OnOffCommandWidgetProps {
   size: 'SMALL' | 'MEDIUM' | 'LARGE'
 }
 
-export default function OnOffCommandWidget({ deviceId, size }: OnOffCommandWidgetProps) {
+export default function OnOffCommandWidget({
+  deviceId,
+  size,
+}: OnOffCommandWidgetProps) {
   const toast = useToast()
   const [isOn, setIsOn] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -20,19 +23,21 @@ export default function OnOffCommandWidget({ deviceId, size }: OnOffCommandWidge
   const handleToggle = async (newState: boolean) => {
     setIsSubmitting(true)
     try {
-      const result = await publishMqtt(deviceId, 'COMMAND_ONOFF', {
-        state: newState ? 'on' : 'off'
-      })
-      
+      const result = await publishMqtt(
+        deviceId,
+        'COMMAND_ONOFF',
+        newState ? 'on' : 'off',
+      )
+
       if (result.success) {
         setIsOn(newState)
-        toast.success(`Command sent: Turn ${newState ? 'ON' : 'OFF'}`)
+        toast.success(`Comando enviado: ${newState ? 'Ligar' : 'Desligar'}`)
       } else {
         throw new Error(result.error)
       }
     } catch (error) {
       console.error('Error sending command', error)
-      toast.error('Failed to send command to device')
+      toast.error('Erro ao enviar comando para o dispositivo')
     } finally {
       setIsSubmitting(false)
     }
@@ -42,9 +47,11 @@ export default function OnOffCommandWidget({ deviceId, size }: OnOffCommandWidge
     return (
       <Card className="h-full">
         <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-          <PowerIcon className={`h-5 w-5 ${isOn ? 'text-green-500' : 'text-slate-400'} mb-1`} />
-          <Switch 
-            checked={isOn} 
+          <PowerIcon
+            className={`h-5 w-5 ${isOn ? 'text-green-500' : 'text-slate-400'} mb-1`}
+          />
+          <Switch
+            checked={isOn}
             onCheckedChange={handleToggle}
             disabled={isSubmitting}
           />
@@ -57,8 +64,10 @@ export default function OnOffCommandWidget({ deviceId, size }: OnOffCommandWidge
     <Card className="h-full">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
-          <PowerIcon className={`h-4 w-4 ${isOn ? 'text-green-500' : 'text-slate-400'} mr-2`} />
-          Power Control
+          <PowerIcon
+            className={`h-4 w-4 ${isOn ? 'text-green-500' : 'text-slate-400'} mr-2`}
+          />
+          Controle ON/OFF
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4">
@@ -67,11 +76,11 @@ export default function OnOffCommandWidget({ deviceId, size }: OnOffCommandWidge
             <div>
               <span className="text-lg font-medium">{isOn ? 'ON' : 'OFF'}</span>
               <p className="text-xs text-muted-foreground">
-                Send command to turn device on or off
+                Envie comando para ligar ou desligar o dispositivo
               </p>
             </div>
-            <Switch 
-              checked={isOn} 
+            <Switch
+              checked={isOn}
               onCheckedChange={handleToggle}
               disabled={isSubmitting}
             />
