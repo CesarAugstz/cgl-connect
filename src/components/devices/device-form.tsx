@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/loading-spinner'
@@ -27,7 +27,7 @@ export default function DeviceForm({
   isOpen,
   onClose,
   onSuccess,
-  deviceId
+  deviceId,
 }: DeviceFormProps) {
   const {
     methods,
@@ -38,8 +38,9 @@ export default function DeviceForm({
     deviceTypes,
     locations,
     users,
+    isTuyaDevice,
     handleDeviceTypeChange,
-    onSubmit
+    onSubmit,
   } = useDeviceForm({ deviceId, onSuccess, isOpen })
 
   return (
@@ -62,7 +63,10 @@ export default function DeviceForm({
           </div>
         ) : (
           <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              className="space-y-6"
+            >
               <DeviceBasicInfoSection />
 
               <DeviceRelationsSection
@@ -75,6 +79,7 @@ export default function DeviceForm({
               <MqttConfigSection
                 deviceTypeId={methods.watch('deviceTypeId')}
                 selectedTopicSuffixes={selectedTopicSuffixes}
+                isTuyaDevice={isTuyaDevice}
               />
 
               <DialogFooter>
@@ -88,7 +93,11 @@ export default function DeviceForm({
                       {isEditMode ? 'Atualizando...' : 'Criando...'}
                     </>
                   ) : (
-                    <>{isEditMode ? 'Atualizar Dispositivo' : 'Criar Dispositivo'}</>
+                    <>
+                      {isEditMode
+                        ? 'Atualizar Dispositivo'
+                        : 'Criar Dispositivo'}
+                    </>
                   )}
                 </Button>
               </DialogFooter>

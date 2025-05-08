@@ -24,10 +24,14 @@ import {
 import { Label } from '@/components/ui/label'
 import { topicSuffixToPath } from '@/lib/mqtt/topicMapping'
 import { FormMultiSelect } from '../common/form-mutiple-select'
+import { FormSwitch } from '@/components/ui/form-fields/form-switch'
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'O nome deve ter pelo menos 2 caracteres.' }),
+  name: z
+    .string()
+    .min(2, { message: 'O nome deve ter pelo menos 2 caracteres.' }),
   topicSuffixes: z.array(z.string()),
+  isTuya: z.boolean().default(false),
 })
 
 type DeviceTypeFormValues = z.infer<typeof formSchema>
@@ -62,6 +66,7 @@ export default function DeviceTypeForm({
     values: {
       name: deviceTypeData?.name || '',
       topicSuffixes: deviceTypeData?.topicSuffixes || [],
+      isTuya: deviceTypeData?.isTuya || false,
     },
   })
 
@@ -71,6 +76,7 @@ export default function DeviceTypeForm({
     const payload = {
       name: values.name,
       topicSuffixes: values.topicSuffixes as TopicSuffix[],
+      isTuya: values.isTuya,
     }
 
     if (isEditMode && deviceTypeData) {
@@ -105,13 +111,16 @@ export default function DeviceTypeForm({
   }
 
   const allTopicSuffixes = Object.values(TopicSuffix)
+  const isTuya = methods.watch('isTuya')
 
   return (
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditMode ? 'Editar Tipo de Dispositivo' : 'Novo Tipo de Dispositivo'}
+            {isEditMode
+              ? 'Editar Tipo de Dispositivo'
+              : 'Novo Tipo de Dispositivo'}
           </DialogTitle>
           <DialogDescription>
             {isEditMode
@@ -126,12 +135,21 @@ export default function DeviceTypeForm({
           </div>
         ) : (
           <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              className="space-y-6"
+            >
               <FormText
                 name="name"
                 label="Nome"
                 placeholder="Digite o nome do tipo de dispositivo"
                 required
+              />
+
+              <FormSwitch
+                name="isTuya"
+                label="Dispositivo Tuya"
+                description="Marque esta opção se este tipo de dispositivo usa a plataforma Tuya"
               />
 
               <div className="space-y-3">
@@ -146,6 +164,12 @@ export default function DeviceTypeForm({
                     }))}
                   />
                 </div>
+                {isTuya && (
+                  <p className="text-sm text-muted-foreground">
+                    Estes tópicos serão mapeados para comandos Tuya
+                    correspondentes.
+                  </p>
+                )}
               </div>
 
               <DialogFooter>
@@ -160,7 +184,9 @@ export default function DeviceTypeForm({
                     </>
                   ) : (
                     <>
-                      {isEditMode ? 'Atualizar Tipo de Dispositivo' : 'Criar Tipo de Dispositivo'}
+                      {isEditMode
+                        ? 'Atualizar Tipo de Dispositivo'
+                        : 'Criar Tipo de Dispositivo'}
                     </>
                   )}
                 </Button>

@@ -1,26 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { DeviceStatus, TopicSuffix } from '@prisma/client'
 import {
-  useCreateDevice,
-  useFindUniqueDevice,
-  useUpdateDevice,
   useFindManyDeviceType,
   useFindManyLocation,
-  useFindManyUser
+  useFindManyUser,
+  useFindUniqueDevice,
+  useCreateDevice,
+  useUpdateDevice,
 } from '@/lib/zenstack-hooks'
 
-const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
-  description: z.string().optional(),
-  status: z.enum(['ONLINE', 'OFFLINE', 'UNKNOWN']),
-  deviceTypeId: z.string({ required_error: 'Device type is required' }),
-  locationId: z.string().optional().nullable(),
-  userId: z.string().optional().nullable(),
-  baseTopic: z.string().min(1, { message: 'Base topic is required' })
-})
+const formSchema = z
+  .object({
+    name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+    description: z.string().optional(),
+    status: z.enum(['ONLINE', 'OFFLINE', 'UNKNOWN']),
+    deviceTypeId: z.string({ required_error: 'Device type is required' }),
+    locationId: z.string().optional().nullable(),
+    userId: z.string().optional().nullable(),
+    baseTopic: z.string().optional(),
+    tuyaId: z.string().optional(),
+  })
+  .refine(
+    data => {
+      return !!data.baseTopic || !!data.tuyaId
+    },
+    {
+      message: 'Either MQTT Base Topic or Tuya ID must be provided',
+      path: ['baseTopic', 'tuyaId'],
+    },
+  )
 
 export type DeviceFormValues = z.infer<typeof formSchema>
 
@@ -33,26 +44,30 @@ interface UseDeviceFormProps {
 export function useDeviceForm({
   deviceId,
   onSuccess,
-  isOpen
+  isOpen,
 }: UseDeviceFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedTopicSuffixes, setSelectedTopicSuffixes] = useState<
     TopicSuffix[]
   >([])
+  const [isTuyaDevice, setIsTuyaDevice] = useState(false)
 
   const isEditMode = !!deviceId
 
-  const { data: editingDeviceData } = useFindUniqueDevice(
-    {
-      where: { id: deviceId },
-      include: {
-        deviceType: true,
-        location: true,
-        user: true
-      }
-    },
-    { enabled: !!deviceId }
-  )
+  const { data: editingDeviceData, isLoading: loadingDevice } =
+    useFindUniqueDevice(
+      {
+        where: { id: deviceId },
+        include: {
+          deviceType: true,
+          location: true,
+          user: true,
+        },
+      },
+      {
+        enabled: isEditMode && isOpen,
+      },
+    )
 
   const { data: deviceTypes, isLoading: loadingDeviceTypes } =
     useFindManyDeviceType()
@@ -73,23 +88,21 @@ export function useDeviceForm({
       deviceTypeId: '',
       locationId: null,
       userId: null,
-      baseTopic: ''
-    }
+      baseTopic: '',
+      tuyaId: '',
+    },
   })
-
-  const deviceTypeSelected = methods.watch('deviceTypeId')
-
-  useEffect(() => {
-    if (!deviceTypeSelected) return
-
-    const deviceType = deviceTypes?.find(dt => dt.id === deviceTypeSelected)
-    setSelectedTopicSuffixes(deviceType?.topicSuffixes || [])
-  }, [deviceTypeSelected, deviceTypes])
 
   useEffect(() => {
     if (!isOpen) return
 
     if (isEditMode && editingDeviceData) {
+      const selectedDeviceType = deviceTypes?.find(
+        dt => dt.id === editingDeviceData.deviceType.id,
+      )
+      const isTuya = selectedDeviceType?.isTuya || false
+      setIsTuyaDevice(isTuya)
+
       methods.reset({
         name: editingDeviceData.name,
         description: editingDeviceData.description || '',
@@ -97,33 +110,44 @@ export function useDeviceForm({
         deviceTypeId: editingDeviceData.deviceType.id,
         locationId: editingDeviceData.location?.id || null,
         userId: editingDeviceData.user?.id || null,
-        baseTopic: editingDeviceData.baseTopic || ''
+        baseTopic: editingDeviceData.baseTopic || '',
+        tuyaId: editingDeviceData.tuyaId || '',
       })
 
-      if (editingDeviceData.deviceType?.topicSuffixes) {
+      if (editingDeviceData.deviceType?.topicSuffixes)
         setSelectedTopicSuffixes(editingDeviceData.deviceType.topicSuffixes)
-      }
-    } else {
-      methods.reset({
-        name: '',
-        description: '',
-        status: 'UNKNOWN',
-        deviceTypeId: '',
-        locationId: null,
-        userId: null,
-        baseTopic: ''
-      })
-      setSelectedTopicSuffixes([])
+
+      return
     }
-  }, [editingDeviceData, methods, isOpen, isEditMode])
+
+    methods.reset({
+      name: '',
+      description: '',
+      status: 'UNKNOWN',
+      deviceTypeId: '',
+      locationId: null,
+      userId: null,
+      baseTopic: '',
+      tuyaId: '',
+    })
+    setSelectedTopicSuffixes([])
+    setIsTuyaDevice(false)
+  }, [editingDeviceData, methods, isOpen, isEditMode, deviceTypes])
 
   const handleDeviceTypeChange = (deviceTypeId: string) => {
     const deviceType = deviceTypes?.find(dt => dt.id === deviceTypeId)
-    if (deviceType?.topicSuffixes) {
-      setSelectedTopicSuffixes(deviceType.topicSuffixes)
-    } else {
-      setSelectedTopicSuffixes([])
+
+    if (deviceType) {
+      setIsTuyaDevice(deviceType.isTuya || false)
+
+      if (deviceType.topicSuffixes)
+        return setSelectedTopicSuffixes(deviceType.topicSuffixes)
+
+      return setSelectedTopicSuffixes([])
     }
+
+    setSelectedTopicSuffixes([])
+    setIsTuyaDevice(false)
   }
 
   const onSubmit = (values: DeviceFormValues) => {
@@ -136,14 +160,15 @@ export function useDeviceForm({
       deviceTypeId: values.deviceTypeId,
       locationId: values.locationId || null,
       userId: values.userId || null,
-      baseTopic: values.baseTopic
+      baseTopic: isTuyaDevice ? null : values.baseTopic,
+      tuyaId: isTuyaDevice ? values.tuyaId : null,
     }
 
     if (isEditMode && editingDeviceData) {
       updateDevice(
         {
           where: { id: editingDeviceData.id },
-          data: deviceFormattedData
+          data: deviceFormattedData,
         },
         {
           onSuccess: () => {
@@ -153,13 +178,13 @@ export function useDeviceForm({
           onError: error => {
             console.error('Error updating device:', error)
             setIsSubmitting(false)
-          }
-        }
+          },
+        },
       )
     } else {
       createDevice(
         {
-          data: deviceFormattedData
+          data: deviceFormattedData,
         },
         {
           onSuccess: () => {
@@ -169,13 +194,14 @@ export function useDeviceForm({
           onError: error => {
             console.error('Error creating device:', error)
             setIsSubmitting(false)
-          }
-        }
+          },
+        },
       )
     }
   }
 
-  const isLoading = loadingDeviceTypes || loadingLocations || loadingUsers
+  const isLoading =
+    loadingDeviceTypes || loadingLocations || loadingUsers || loadingDevice
 
   return {
     methods,
@@ -186,7 +212,8 @@ export function useDeviceForm({
     deviceTypes: deviceTypes || [],
     locations: locations || [],
     users: users || [],
+    isTuyaDevice,
     handleDeviceTypeChange,
-    onSubmit
+    onSubmit,
   }
 }

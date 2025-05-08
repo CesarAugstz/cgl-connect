@@ -6,14 +6,14 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
   AlertDialog,
@@ -23,7 +23,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Edit, MoreVertical, Trash } from 'lucide-react'
@@ -42,6 +42,7 @@ interface DeviceTypeWithRelations {
   _count?: {
     devices: number
   }
+  isTuya: boolean
 }
 
 interface DeviceTypeTableProps {
@@ -53,29 +54,35 @@ interface DeviceTypeTableProps {
 export default function DeviceTypeTable({
   deviceTypes,
   onRefresh,
-  onClickEdit
+  onClickEdit,
 }: DeviceTypeTableProps) {
-  const [deviceTypeToDelete, setDeviceTypeToDelete] = useState<string | null>(null)
+  const [deviceTypeToDelete, setDeviceTypeToDelete] = useState<string | null>(
+    null,
+  )
   const { mutate: deleteDeviceType } = useDeleteDeviceType()
 
   const handleDelete = () => {
     if (deviceTypeToDelete) {
       deleteDeviceType(
         {
-          where: { id: deviceTypeToDelete }
+          where: { id: deviceTypeToDelete },
         },
         {
           onSuccess: () => {
             setDeviceTypeToDelete(null)
             onRefresh()
-          }
-        }
+          },
+        },
       )
     }
   }
 
   if (deviceTypes.length === 0) {
-    return <div className="text-center py-4">Nenhum tipo de dispositivo encontrado</div>
+    return (
+      <div className="text-center py-4">
+        Nenhum tipo de dispositivo encontrado
+      </div>
+    )
   }
 
   return (
@@ -84,6 +91,7 @@ export default function DeviceTypeTable({
         <TableHeader>
           <TableRow>
             <TableHead>Nome</TableHead>
+            <TableHead>Tipo</TableHead>
             <TableHead>Tópicos Suportados</TableHead>
             <TableHead>Dispositivos</TableHead>
             <TableHead>Última Atualização</TableHead>
@@ -95,6 +103,13 @@ export default function DeviceTypeTable({
             <TableRow key={deviceType.id}>
               <TableCell className="font-medium">{deviceType.name}</TableCell>
               <TableCell>
+                {deviceType.isTuya ? (
+                  <Badge className="bg-blue-500">Tuya</Badge>
+                ) : (
+                  <Badge variant="outline">MQTT</Badge>
+                )}
+              </TableCell>
+              <TableCell>
                 <div className="flex flex-wrap gap-1">
                   {deviceType.topicSuffixes.map(suffix => (
                     <Badge key={suffix} variant="outline" className="text-xs">
@@ -102,7 +117,9 @@ export default function DeviceTypeTable({
                     </Badge>
                   ))}
                   {deviceType.topicSuffixes.length === 0 && (
-                    <span className="text-muted-foreground text-sm">Nenhum</span>
+                    <span className="text-muted-foreground text-sm">
+                      Nenhum
+                    </span>
                   )}
                 </div>
               </TableCell>
@@ -116,7 +133,9 @@ export default function DeviceTypeTable({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => onClickEdit(deviceType.id)}>
+                    <DropdownMenuItem
+                      onClick={() => onClickEdit(deviceType.id)}
+                    >
                       <Edit className="mr-2 h-4 w-4" />
                       Editar
                     </DropdownMenuItem>
@@ -144,7 +163,8 @@ export default function DeviceTypeTable({
             <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
               Esta ação não pode ser desfeita. Isso excluirá permanentemente o
-              tipo de dispositivo. Quaisquer dispositivos usando este tipo podem ser afetados.
+              tipo de dispositivo. Quaisquer dispositivos usando este tipo podem
+              ser afetados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

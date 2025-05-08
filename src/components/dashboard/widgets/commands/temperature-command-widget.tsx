@@ -1,39 +1,84 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Slider } from '@/components/ui/slider'
 import { Thermometer } from 'lucide-react'
 import { useToast } from '@/lib/hooks/toast'
-import { Button } from '@/components/ui/button'
+import { useFindUniqueDevice } from '@/lib/zenstack-hooks'
+import { sendDeviceCommand } from './device-command'
+import LoadingSpinner from '@/components/loading-spinner'
 
 interface TemperatureCommandWidgetProps {
   deviceId: string
   size: 'SMALL' | 'MEDIUM' | 'LARGE'
 }
 
-export default function TemperatureCommandWidget({ deviceId, size }: TemperatureCommandWidgetProps) {
+export default function TemperatureCommandWidget({
+  deviceId,
+  size,
+}: TemperatureCommandWidgetProps) {
   const toast = useToast()
-  const [temperature, setTemperature] = useState(22)
+  const [temperature, setTemperature] = useState(50)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [temperatureIsSet, setTemperatureIsSet] = useState(false)
+
+  const device = useFindUniqueDevice({
+    where: { id: deviceId },
+    select: {
+      telemetry: {
+        select: {
+          data: true,
+        },
+        where: {
+          topicSuffix: 'STATUS_TEMPERATURE',
+        },
+        orderBy: {
+          receivedAt: 'desc',
+        },
+        take: 1,
+      },
+    },
+  })
+
+  useEffect(() => {
+    if (!device.data || !device.isSuccess) return
+
+    const latestStatus = device.data?.telemetry[0]?.data as any
+    console.log('latest temperature status', latestStatus)
+    const temperatureValue =
+      (typeof latestStatus?.temperature === 'number'
+        ? latestStatus.temperature
+        : typeof latestStatus?.value === 'number'
+          ? latestStatus.value
+          : 500) / 10
+
+    setTemperature(temperatureValue)
+    setTemperatureIsSet(true)
+
+    return () => {
+      setTemperatureIsSet(false)
+    }
+  }, [device.data, device.isSuccess])
 
   const handleTemperatureChange = async (value: number[]) => {
     const newTemperature = value[0]
     if (newTemperature === temperature) return
-    
-    setTemperature(newTemperature)
-  }
 
-  const sendTemperatureCommand = async () => {
     setIsSubmitting(true)
     try {
-      // Mock sending command to device
-      await new Promise(resolve => setTimeout(resolve, 800))
-      
-      toast.success(`Command sent: Set temperature to ${temperature}°C`)
-      
-      // Ideally, here we would publish to MQTT topic:
-      // mqttClient.publish(`${deviceBaseTopic}/command/temperature`, { temperature })
+      const result = await sendDeviceCommand({
+        deviceId,
+        topicSuffix: 'COMMAND_TEMPERATURE',
+        payload: newTemperature * 10,
+      })
+
+      if (result.success) {
+        setTemperature(newTemperature)
+        toast.success(`Command sent: Set temperature to ${newTemperature}K`)
+      } else {
+        throw new Error(result.error)
+      }
     } catch (error) {
       console.error('Error sending temperature command', error)
       toast.error('Failed to send temperature command to device')
@@ -42,13 +87,32 @@ export default function TemperatureCommandWidget({ deviceId, size }: Temperature
     }
   }
 
+  if (device.isLoading || !temperatureIsSet) {
+    return (
+      <Card className="h-full">
+        <CardContent className="p-4 flex flex-col items-center justify-center h-full">
+          <Thermometer className="h-5 w-5 text-blue-500 mb-1" />
+          <div className="text-2xl font-bold">Loading...</div>
+        </CardContent>
+      </Card>
+    )
+  }
+
   if (size === 'SMALL') {
     return (
       <Card className="h-full">
         <CardContent className="p-4 flex flex-col items-center justify-center h-full">
           <Thermometer className="h-5 w-5 text-blue-500 mb-1" />
-          <div className="text-2xl font-bold">{temperature}°C</div>
-          <p className="text-xs text-muted-foreground">Target</p>
+          <div className="text-sm font-bold mb-1">{temperature}K</div>
+          <Slider
+            className="w-16"
+            defaultValue={[temperature]}
+            max={100}
+            step={1}
+            min={1}
+            onValueCommit={handleTemperatureChange}
+            disabled={isSubmitting}
+          />
         </CardContent>
       </Card>
     )
@@ -59,36 +123,32 @@ export default function TemperatureCommandWidget({ deviceId, size }: Temperature
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
           <Thermometer className="h-4 w-4 text-blue-500 mr-2" />
-          Temperature Control
+          Temperatura da Luz
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4">
         <div className="flex flex-col">
           <div className="flex items-center mb-4">
-            <span className="text-2xl font-bold">{temperature}°C</span>
+            {isSubmitting ? (
+              <LoadingSpinner size="sm" className="h-2 w-2 mr-2" />
+            ) : (
+              <span className="text-2xl font-bold">{temperature}K</span>
+            )}
             <span className="ml-2 text-xs text-muted-foreground">
-              Set target temperature
+              Define a temperatura da cor da luz
             </span>
           </div>
-          
+
           <div className="mb-6">
             <Slider
               defaultValue={[temperature]}
-              min={16}
-              max={30}
-              step={0.5}
-              onValueChange={(value) => setTemperature(value[0])}
+              max={100}
+              step={1}
+              min={1}
+              onValueCommit={handleTemperatureChange}
               disabled={isSubmitting}
             />
           </div>
-          
-          <Button 
-            onClick={sendTemperatureCommand}
-            disabled={isSubmitting}
-            className="mt-2"
-          >
-            Send Command
-          </Button>
         </div>
       </CardContent>
     </Card>

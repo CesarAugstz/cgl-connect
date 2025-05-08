@@ -48,7 +48,7 @@ interface DeviceWidgetProps {
       id: string
       name: string
       status: DeviceStatus
-      baseTopic: string
+      baseTopic?: string | null
       description?: string | null
       deviceType: {
         name: string
@@ -64,19 +64,12 @@ interface DeviceWidgetProps {
 export default function DeviceWidget({
   dashboardDevice,
   isEditMode,
-  onRemove,
   onRefresh,
 }: DeviceWidgetProps) {
   const [isResizing, setIsResizing] = useState(false)
   const [widgetSize, setWidgetSize] = useState<WidgetSize>(
     dashboardDevice.layout.width,
   )
-  const [activeTopicSuffix, setActiveTopicSuffix] =
-    useState<TopicSuffix | null>(
-      dashboardDevice.device.deviceType.topicSuffixes.length > 0
-        ? dashboardDevice.device.deviceType.topicSuffixes[0]
-        : null,
-    )
 
   const { mutate: deleteDashboardDevice, isPending: isDeleting } =
     useDeleteDashboardDevice()
@@ -175,23 +168,23 @@ export default function DeviceWidget({
   const formatTopicSuffix = (suffix: TopicSuffix) => {
     switch (suffix) {
       case 'STATUS_TEMPERATURE':
-        return 'Temp'
+        return 'Temperatura'
       case 'STATUS_HUMIDITY':
-        return 'Humidity'
+        return 'Humidade'
       case 'STATUS_ONOFF':
         return 'Power'
       case 'STATUS_BRIGHTNESS':
-        return 'Brightness'
+        return 'Brilho'
       case 'STATUS_COLOR':
-        return 'Color'
+        return 'Cor'
       case 'COMMAND_ONOFF':
-        return 'Power Ctrl'
+        return 'Power'
       case 'COMMAND_BRIGHTNESS':
-        return 'Bright Ctrl'
+        return 'Brilho'
       case 'COMMAND_COLOR':
-        return 'Color Ctrl'
+        return 'Cor'
       case 'COMMAND_TEMPERATURE':
-        return 'Temp Ctrl'
+        return 'Temperatura'
       default:
         throw new Error(`Unknown topic suffix: ${suffix}`)
     }
@@ -255,11 +248,7 @@ export default function DeviceWidget({
     )
 
     return (
-      <Tabs
-        defaultValue={topicSuffixes[0]}
-        onValueChange={value => setActiveTopicSuffix(value as TopicSuffix)}
-        className="h-full flex flex-col"
-      >
+      <Tabs defaultValue={topicSuffixes[0]} className="h-full flex flex-col">
         {statusTopics.length > 0 && (
           <>
             Status
@@ -277,7 +266,7 @@ export default function DeviceWidget({
 
         {commandTopics.length > 0 && (
           <>
-            Commands
+            Comandos
             <TabsList className="mb-2 w-full">
               {topicSuffixes
                 .filter(suffix => suffix.startsWith('COMMAND'))

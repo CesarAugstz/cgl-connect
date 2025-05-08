@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -18,7 +18,7 @@ import {
   Edit,
   AlertTriangle,
   Activity,
-  Settings
+  Settings,
 } from 'lucide-react'
 import DeviceForm from '@/components/devices/device-form'
 import LoadingSpinner from '@/components/loading-spinner'
@@ -28,7 +28,7 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger
+  AccordionTrigger,
 } from '@/components/ui/accordion'
 import { topicSuffixToPath } from '@/lib/mqtt/topicMapping'
 import { TopicSuffix } from '@prisma/client'
@@ -43,7 +43,7 @@ export default function DeviceDetailPage() {
   const {
     data: device,
     isLoading,
-    refetch
+    refetch,
   } = useFindUniqueDevice({
     where: { id: deviceId },
     include: {
@@ -52,17 +52,17 @@ export default function DeviceDetailPage() {
       user: true,
       telemetry: {
         orderBy: {
-          receivedAt: 'desc'
+          receivedAt: 'desc',
         },
-        take: 10
+        take: 10,
       },
       alerts: {
         orderBy: {
-          createdAt: 'desc'
+          createdAt: 'desc',
         },
-        take: 5
-      }
-    }
+        take: 5,
+      },
+    },
   })
 
   if (isLoading) {
@@ -131,7 +131,7 @@ export default function DeviceDetailPage() {
       acc[item.topicSuffix].push(item)
       return acc
     },
-    {} as Record<TopicSuffix, typeof device.telemetry>
+    {} as Record<TopicSuffix, typeof device.telemetry>,
   )
 
   return (
@@ -171,13 +171,18 @@ export default function DeviceDetailPage() {
               <div className="text-sm font-medium text-gray-500">
                 Tipo de Dispositivo
               </div>
-              <div>{device.deviceType.name}</div>
+              <div>
+                {device.deviceType.name}
+                {device.deviceType.isTuya && (
+                  <Badge variant="outline" className="ml-2">
+                    Tuya
+                  </Badge>
+                )}
+              </div>
             </div>
 
             <div>
-              <div className="text-sm font-medium text-gray-500">
-                Descrição
-              </div>
+              <div className="text-sm font-medium text-gray-500">Descrição</div>
               <div>{device.description || 'Nenhuma descrição fornecida'}</div>
             </div>
 
@@ -185,7 +190,9 @@ export default function DeviceDetailPage() {
               <div className="text-sm font-medium text-gray-500">
                 Localização
               </div>
-              <div>{device.location?.name || 'Nenhuma localização atribuída'}</div>
+              <div>
+                {device.location?.name || 'Nenhuma localização atribuída'}
+              </div>
             </div>
 
             <div>
@@ -195,26 +202,39 @@ export default function DeviceDetailPage() {
               <div>{device.user?.name || 'Nenhum usuário atribuído'}</div>
             </div>
 
-            <div>
-              <div className="text-sm font-medium text-gray-500">
-                Tópico Base
+            {device.deviceType.isTuya ? (
+              <div>
+                <div className="text-sm font-medium text-gray-500">ID Tuya</div>
+                <div className="font-mono text-sm">
+                  {device.tuyaId || 'Não configurado'}
+                </div>
               </div>
-              <div className="font-mono text-sm">{device.baseTopic}</div>
-            </div>
+            ) : (
+              <div>
+                <div className="text-sm font-medium text-gray-500">
+                  Tópico Base
+                </div>
+                <div className="font-mono text-sm">{device.baseTopic}</div>
+              </div>
+            )}
 
             <div>
               <div className="text-sm font-medium text-gray-500">
                 Última Atualização
               </div>
               <div>
-                {dayJs(device.updatedAt).format('DD [de] MMMM [de] YYYY HH:mm:ss')}
+                {dayJs(device.updatedAt).format(
+                  'DD [de] MMMM [de] YYYY HH:mm:ss',
+                )}
               </div>
             </div>
 
             <div>
               <div className="text-sm font-medium text-gray-500">Criado em</div>
               <div>
-                {dayJs(device.createdAt).format('DD [de] MMMM [de] YYYY HH:mm:ss')}
+                {dayJs(device.createdAt).format(
+                  'DD [de] MMMM [de] YYYY HH:mm:ss',
+                )}
               </div>
             </div>
           </CardContent>
@@ -245,7 +265,8 @@ export default function DeviceDetailPage() {
                 {!device.deviceType.topicSuffixes ||
                 device.deviceType.topicSuffixes.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    Nenhum sufixo de tópico configurado para este tipo de dispositivo
+                    Nenhum sufixo de tópico configurado para este tipo de
+                    dispositivo
                   </div>
                 ) : device.telemetry.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
@@ -259,8 +280,8 @@ export default function DeviceDetailPage() {
                           <CardTitle className="text-lg">
                             Tópico:{' '}
                             {getFullTopicPath(
-                              device.baseTopic,
-                              suffix as TopicSuffix
+                              device.baseTopic ?? '',
+                              suffix as TopicSuffix,
                             )}
                           </CardTitle>
                         </CardHeader>
@@ -278,7 +299,7 @@ export default function DeviceDetailPage() {
                                     <span>Telemetria {index + 1}</span>
                                     <span className="text-sm text-gray-500">
                                       {dayJs(item.receivedAt).format(
-                                        'DD/MM/YYYY HH:mm:ss'
+                                        'DD/MM/YYYY HH:mm:ss',
                                       )}
                                     </span>
                                   </div>
@@ -318,11 +339,17 @@ export default function DeviceDetailPage() {
                       >
                         <div className="flex justify-between items-center mb-2">
                           <div className="font-medium">
-                            Alerta {alert.severity === 'HIGH' ? 'Alto' : 
-                                   alert.severity === 'MEDIUM' ? 'Médio' : 'Baixo'}
+                            Alerta{' '}
+                            {alert.severity === 'HIGH'
+                              ? 'Alto'
+                              : alert.severity === 'MEDIUM'
+                                ? 'Médio'
+                                : 'Baixo'}
                           </div>
                           <div className="text-sm text-gray-500">
-                            {dayJs(alert.createdAt).format('DD/MM/YYYY HH:mm:ss')}
+                            {dayJs(alert.createdAt).format(
+                              'DD/MM/YYYY HH:mm:ss',
+                            )}
                           </div>
                         </div>
                         <div>{alert.message}</div>
@@ -350,7 +377,7 @@ export default function DeviceDetailPage() {
                               {suffix.replace('_', ' ').toLowerCase()}
                             </span>
                             <span className="font-mono text-xs">
-                              {getFullTopicPath(device.baseTopic, suffix)}
+                              {getFullTopicPath(device.baseTopic ?? '', suffix)}
                             </span>
                           </div>
                         ))}

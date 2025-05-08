@@ -61,6 +61,7 @@ model DeviceType {
   name          String        @unique()
   devices       Device[]
   topicSuffixes TopicSuffix[]
+  isTuya        Boolean       @default(false)
 }
 
 model Device {
@@ -77,7 +78,8 @@ model Device {
   user         User?             @relation(fields: [userId], references: [id])
   locationId   String?
   location     Location?         @relation(fields: [locationId], references: [id])
-  baseTopic    String            @unique()
+  tuyaId       String?
+  baseTopic    String?
   telemetry    Telemetry[]
   alerts       Alert[]
   dashboards   DashboardDevice[]
