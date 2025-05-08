@@ -1,58 +1,63 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { PlusCircle, RefreshCw } from "lucide-react";
-import { DeviceStatus } from "@prisma/client";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DeviceTable from "@/components/devices/device-table";
-import DeviceForm from "@/components/devices/device-form";
-import LoadingSpinner from "@/components/loading-spinner";
-import { useFindManyDevice } from "@/lib/zenstack-hooks";
+} from '@/components/ui/card'
+import { PlusCircle, RefreshCw } from 'lucide-react'
+import { DeviceStatus } from '@prisma/client'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import DeviceTable from '@/components/devices/device-table'
+import DeviceForm from '@/components/devices/device-form'
+import LoadingSpinner from '@/components/loading-spinner'
+import { useFindManyDevice } from '@/lib/zenstack-hooks'
 
 export default function DevicesPage() {
-  const router = useRouter();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [selectedTabValue, setSelectedTabValue] = useState("all");
-  
-  const { data: devices, isLoading, refetch } = useFindManyDevice({
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [selectedTabValue, setSelectedTabValue] = useState('all')
+
+  const {
+    data: devices,
+    isLoading,
+    refetch,
+  } = useFindManyDevice({
     include: {
       deviceType: true,
       location: true,
       user: true,
     },
-  });
+  })
 
   const filteredDevices = devices?.filter(device => {
-    if (selectedTabValue === "all") return true;
-    if (selectedTabValue === "online") return device.status === DeviceStatus.ONLINE;
-    if (selectedTabValue === "offline") return device.status === DeviceStatus.OFFLINE;
-    if (selectedTabValue === "unknown") return device.status === DeviceStatus.UNKNOWN;
-    return true;
-  });
+    if (selectedTabValue === 'all') return true
+    if (selectedTabValue === 'online')
+      return device.status === DeviceStatus.ONLINE
+    if (selectedTabValue === 'offline')
+      return device.status === DeviceStatus.OFFLINE
+    if (selectedTabValue === 'unknown')
+      return device.status === DeviceStatus.UNKNOWN
+    return true
+  })
 
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Gerenciamento de Dispositivos</h1>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => refetch()}
             className="flex items-center gap-1"
           >
             <RefreshCw className="h-4 w-4" />
             Atualizar
           </Button>
-          <Button 
+          <Button
             onClick={() => setIsCreateModalOpen(true)}
             className="flex items-center gap-1"
           >
@@ -70,9 +75,9 @@ export default function DevicesPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs 
-            defaultValue="all" 
-            value={selectedTabValue} 
+          <Tabs
+            defaultValue="all"
+            value={selectedTabValue}
             onValueChange={setSelectedTabValue}
             className="mb-6"
           >
@@ -89,7 +94,7 @@ export default function DevicesPage() {
               <LoadingSpinner />
             </div>
           ) : (
-            <DeviceTable 
+            <DeviceTable
               devices={filteredDevices || []}
               onRefresh={() => refetch()}
             />
@@ -97,14 +102,14 @@ export default function DevicesPage() {
         </CardContent>
       </Card>
 
-      <DeviceForm 
+      <DeviceForm
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSuccess={() => {
-          setIsCreateModalOpen(false);
-          refetch();
+          setIsCreateModalOpen(false)
+          refetch()
         }}
       />
     </div>
-  );
+  )
 }

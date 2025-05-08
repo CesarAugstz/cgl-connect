@@ -164,7 +164,7 @@ export default function DeviceActivityMenu({
                           <span>
                             Topic:{' '}
                             {getFullTopicPath(
-                              device.baseTopic,
+                              device.baseTopic ?? '',
                               item.topicSuffix,
                             )}
                           </span>

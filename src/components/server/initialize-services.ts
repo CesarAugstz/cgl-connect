@@ -1,8 +1,11 @@
-import { initializeMqttService } from "@/server/actions/mqtt-actions";
+import {
+  initializeMqttService,
+  initializeTuyaService,
+} from '@/server/actions/mqtt-actions'
 
 export async function InitializeServices() {
+  await initializeMqttService()
+  await initializeTuyaService()
 
-    await initializeMqttService()
-
-    return null
+  return null
 }

@@ -55,6 +55,7 @@ model DeviceType extends BaseModel {
   name          String        @unique
   devices       Device[]
   topicSuffixes TopicSuffix[]
+  isTuya        Boolean       @default(false)
 
   @@allow('all', true)
 }
@@ -76,8 +77,9 @@ model Device extends BaseModel {
   user         User?        @relation(fields: [userId], references: [id])
   locationId   String?
   location     Location?    @relation(fields: [locationId], references: [id])
+  tuyaId       String?
 
-  baseTopic    String       @unique
+  baseTopic    String?      
   telemetry    Telemetry[]
   alerts       Alert[]
   

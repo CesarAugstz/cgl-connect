@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { PowerIcon } from 'lucide-react'
 import { useToast } from '@/lib/hooks/toast'
-import { publishMqtt } from './actions'
+import { useFindUniqueDevice } from '@/lib/zenstack-hooks'
+import { sendDeviceCommand } from './device-command'
 
 interface OnOffCommandWidgetProps {
   deviceId: string
@@ -20,14 +21,45 @@ export default function OnOffCommandWidget({
   const [isOn, setIsOn] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const device = useFindUniqueDevice({
+    where: { id: deviceId },
+    select: {
+      telemetry: {
+        select: {
+          data: true,
+        },
+        where: {
+          topicSuffix: 'STATUS_ONOFF',
+        },
+        orderBy: {
+          receivedAt: 'desc',
+        },
+        take: 1,
+      },
+    },
+  })
+
+  useEffect(() => {
+    if (!device.data || !device.isSuccess) return
+
+    const latestStatus = device.data?.telemetry[0]?.data as any
+    const isOnFromStatus =
+      latestStatus?.state === true ||
+      latestStatus?.status === 'ON' ||
+      latestStatus?.value === 1 ||
+      latestStatus?.value === true
+
+    setIsOn(isOnFromStatus)
+  }, [device.data, device.isSuccess])
+
   const handleToggle = async (newState: boolean) => {
     setIsSubmitting(true)
     try {
-      const result = await publishMqtt(
+      const result = await sendDeviceCommand({
         deviceId,
-        'COMMAND_ONOFF',
-        newState ? 'on' : 'off',
-      )
+        topicSuffix: 'COMMAND_ONOFF',
+        payload: newState ? 'on' : 'off',
+      })
 
       if (result.success) {
         setIsOn(newState)
