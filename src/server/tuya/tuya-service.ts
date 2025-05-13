@@ -115,7 +115,7 @@ export class TuyaService extends EventEmitter {
       case 'colour_data_v2':
         return 'STATUS_COLOR'
       case 'temp_value_v2':
-        return 'STATUS_TEMPERATURE'
+        return 'STATUS_LIGHT_TEMPERATURE'
       case 'work_mode':
       case 'scene_data_v2':
       case 'countdown_1':
@@ -184,7 +184,7 @@ export class TuyaService extends EventEmitter {
         return 'bright_value_v2'
       case 'COMMAND_COLOR':
         return 'colour_data_v2'
-      case 'COMMAND_TEMPERATURE':
+      case 'COMMAND_LIGHT_TEMPERATURE':
         return 'temp_value_v2'
       default:
         return null

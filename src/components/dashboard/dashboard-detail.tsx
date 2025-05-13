@@ -1,9 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Edit, Plus, Share2, Trash, LayoutGrid } from 'lucide-react'
+import {
+  ArrowLeft,
+  Edit,
+  Plus,
+  Share2,
+  Trash,
+  LayoutGrid,
+  Menu,
+} from 'lucide-react'
 import {
   useFindUniqueDashboard,
   useFindManyDashboardDevice,
@@ -21,6 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import DeviceWidget from '@/components/dashboard/device-widget'
 import AddDeviceToDashboardModal from '@/components/dashboard/add-device-modal'
 import { useSession } from 'next-auth/react'
@@ -32,6 +41,21 @@ export default function DashboardDetail({ id: dashboardId }: { id: string }) {
   const [isSharingModalOpen, setIsSharingModalOpen] = useState(false)
   const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768)
+      if (window.innerWidth >= 768) {
+        setIsDrawerOpen(false)
+      }
+    }
+
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   const { data: dashboard, isLoading: isDashboardLoading } =
     useFindUniqueDashboard({
@@ -65,6 +89,62 @@ export default function DashboardDetail({ id: dashboardId }: { id: string }) {
     )
   }
 
+  const ActionButtons = () => (
+    <div className="flex flex-col w-full gap-3 md:flex-row">
+      {isDashboardOwner && (
+        <>
+          <Button
+            variant={isEditMode ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => {
+              setIsDrawerOpen(false)
+              setIsEditMode(!isEditMode)
+            }}
+          >
+            <Edit className="h-4 w-4 mr-2" />
+            {isEditMode ? 'Salvar Layout' : 'Editar Layout'}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setIsAddDeviceModalOpen(true)
+              setIsDrawerOpen(false)
+            }}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Adicionar Dispositivo
+          </Button>
+        </>
+      )}
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => {
+          setIsDrawerOpen(false)
+          setIsSharingModalOpen(true)
+        }}
+      >
+        <Share2 className="h-4 w-4 mr-2" />
+        Compartilhar
+      </Button>
+      {isDashboardOwner && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-destructive hover:text-destructive"
+          onClick={() => {
+            setIsDrawerOpen(false)
+            setIsDeleteDialogOpen(true)
+          }}
+        >
+          <Trash className="h-4 w-4 mr-2" />
+          Excluir
+        </Button>
+      )}
+    </div>
+  )
+
   return (
     <div className="container mx-auto py-6">
       {isDashboardLoading || isDevicesLoading ? (
@@ -73,7 +153,7 @@ export default function DashboardDetail({ id: dashboardId }: { id: string }) {
         </div>
       ) : dashboard ? (
         <>
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-wrap gap-3 justify-between items-center mb-6">
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
@@ -84,47 +164,26 @@ export default function DashboardDetail({ id: dashboardId }: { id: string }) {
               </Button>
               <h1 className="text-3xl font-bold">{dashboard.name}</h1>
             </div>
-            <div className="flex gap-2">
-              {isDashboardOwner && (
-                <>
-                  <Button
-                    variant={isEditMode ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setIsEditMode(!isEditMode)}
-                  >
-                    <Edit className="h-4 w-4 mr-2" />
-                    {isEditMode ? 'Salvar Layout' : 'Editar Layout'}
+
+            {isMobile ? (
+              <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                <DrawerTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Menu className="h-5 w-5" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsAddDeviceModalOpen(true)}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Adicionar Dispositivo
-                  </Button>
-                </>
-              )}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsSharingModalOpen(true)}
-              >
-                <Share2 className="h-4 w-4 mr-2" />
-                Compartilhar
-              </Button>
-              {isDashboardOwner && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-destructive hover:text-destructive"
-                  onClick={() => setIsDeleteDialogOpen(true)}
-                >
-                  <Trash className="h-4 w-4 mr-2" />
-                  Excluir
-                </Button>
-              )}
-            </div>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <div className="p-4">
+                    <h2 className="text-lg font-semibold mb-4">Ações</h2>
+                    <div className="flex flex-row flex-wrap gap-2">
+                      <ActionButtons />
+                    </div>
+                  </div>
+                </DrawerContent>
+              </Drawer>
+            ) : (
+              <ActionButtons />
+            )}
           </div>
 
           {dashboard.description && (

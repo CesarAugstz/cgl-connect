@@ -3,25 +3,25 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Slider } from '@/components/ui/slider'
-import { SunIcon } from 'lucide-react'
+import { Thermometer } from 'lucide-react'
 import { useToast } from '@/lib/hooks/toast'
 import { useFindUniqueDevice } from '@/lib/zenstack-hooks'
 import { sendDeviceCommand } from './device-command'
 import LoadingSpinner from '@/components/loading-spinner'
 
-interface BrightnessCommandWidgetProps {
+interface TemperatureCommandWidgetProps {
   deviceId: string
   size: 'SMALL' | 'MEDIUM' | 'LARGE'
 }
 
-export default function BrightnessCommandWidget({
+export default function LightTemperatureCommandWidget({
   deviceId,
   size,
-}: BrightnessCommandWidgetProps) {
+}: TemperatureCommandWidgetProps) {
   const toast = useToast()
-  const [brightness, setBrightness] = useState(50)
+  const [temperature, setTemperature] = useState(50)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [brightnessIsSet, setBrightnessIsSet] = useState(false)
+  const [temperatureIsSet, setTemperatureIsSet] = useState(false)
 
   const device = useFindUniqueDevice({
     where: { id: deviceId },
@@ -31,7 +31,7 @@ export default function BrightnessCommandWidget({
           data: true,
         },
         where: {
-          topicSuffix: 'STATUS_BRIGHTNESS',
+          topicSuffix: 'STATUS_LIGHT_TEMPERATURE',
         },
         orderBy: {
           receivedAt: 'desc',
@@ -45,53 +45,53 @@ export default function BrightnessCommandWidget({
     if (!device.data || !device.isSuccess) return
 
     const latestStatus = device.data?.telemetry[0]?.data as any
-    console.log('latest brightness status', latestStatus)
-    const brightnessValue =
-      (typeof latestStatus?.brightness === 'number'
-        ? latestStatus.brightness
+    console.log('latest temperature status', latestStatus)
+    const temperatureValue =
+      (typeof latestStatus?.temperature === 'number'
+        ? latestStatus.temperature
         : typeof latestStatus?.value === 'number'
           ? latestStatus.value
           : 500) / 10
 
-    setBrightness(brightnessValue)
-    setBrightnessIsSet(true)
+    setTemperature(temperatureValue)
+    setTemperatureIsSet(true)
 
     return () => {
-      setBrightnessIsSet(false)
+      setTemperatureIsSet(false)
     }
   }, [device.data, device.isSuccess])
 
-  const handleBrightnessChange = async (value: number[]) => {
-    const newBrightness = value[0]
-    if (newBrightness === brightness) return
+  const handleTemperatureChange = async (value: number[]) => {
+    const newTemperature = value[0]
+    if (newTemperature === temperature) return
 
     setIsSubmitting(true)
     try {
       const result = await sendDeviceCommand({
         deviceId,
-        topicSuffix: 'COMMAND_BRIGHTNESS',
-        payload: newBrightness * 10,
+        topicSuffix: 'COMMAND_LIGHT_TEMPERATURE',
+        payload: newTemperature * 10,
       })
 
       if (result.success) {
-        setBrightness(newBrightness)
-        toast.success(`Command sent: Set brightness to ${newBrightness}%`)
+        setTemperature(newTemperature)
+        toast.success(`Command sent: Set temperature to ${newTemperature}K`)
       } else {
         throw new Error(result.error)
       }
     } catch (error) {
-      console.error('Error sending brightness command', error)
-      toast.error('Falha ao enviar comando de brilho para o dispositivo')
+      console.error('Error sending temperature command', error)
+      toast.error('Falha ao enviar comando de temperatura para o dispositivo')
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  if (device.isLoading || !brightnessIsSet) {
+  if (device.isLoading || !temperatureIsSet) {
     return (
       <Card className="h-full">
         <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-          <SunIcon className="h-5 w-5 text-amber-500 mb-1" />
+          <Thermometer className="h-5 w-5 text-blue-500 mb-1" />
           <div className="text-2xl font-bold">Loading...</div>
         </CardContent>
       </Card>
@@ -102,15 +102,15 @@ export default function BrightnessCommandWidget({
     return (
       <Card className="h-full">
         <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-          <SunIcon className="h-5 w-5 text-amber-500 mb-1" />
-          <div className="text-sm font-bold mb-1">{brightness}%</div>
+          <Thermometer className="h-5 w-5 text-blue-500 mb-1" />
+          <div className="text-sm font-bold mb-1">{temperature}K</div>
           <Slider
             className="w-16"
-            defaultValue={[brightness]}
+            defaultValue={[temperature]}
             max={100}
             step={1}
             min={1}
-            onValueCommit={handleBrightnessChange}
+            onValueCommit={handleTemperatureChange}
             disabled={isSubmitting}
           />
         </CardContent>
@@ -122,8 +122,8 @@ export default function BrightnessCommandWidget({
     <Card className="h-full">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
-          <SunIcon className="h-4 w-4 text-amber-500 mr-2" />
-          Brilho
+          <Thermometer className="h-4 w-4 text-blue-500 mr-2" />
+          Temperatura da Luz
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4">
@@ -132,20 +132,20 @@ export default function BrightnessCommandWidget({
             {isSubmitting ? (
               <LoadingSpinner size="sm" className="h-2 w-2 mr-2" />
             ) : (
-              <span className="text-2xl font-bold">{brightness}%</span>
+              <span className="text-2xl font-bold">{temperature}K</span>
             )}
             <span className="ml-2 text-xs text-muted-foreground">
-              Define a brilho para o dispositivo
+              Define a temperatura da cor da luz
             </span>
           </div>
 
           <div className="mb-6">
             <Slider
-              defaultValue={[brightness]}
+              defaultValue={[temperature]}
               max={100}
               step={1}
               min={1}
-              onValueCommit={handleBrightnessChange}
+              onValueCommit={handleTemperatureChange}
               disabled={isSubmitting}
             />
           </div>

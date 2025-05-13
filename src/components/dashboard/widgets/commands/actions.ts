@@ -1,11 +1,12 @@
 'use server'
 
 import { getMqttService } from '@/server/mqtt'
+import { TopicSuffix } from '@prisma/client'
 
 export async function publishMqtt(
   deviceId: string,
-  topicSuffix: 'COMMAND_ONOFF' | 'COMMAND_BRIGHTNESS' | 'COMMAND_COLOR' | 'COMMAND_TEMPERATURE',
-  payload: any
+  topicSuffix: TopicSuffix,
+  payload: any,
 ) {
   try {
     const service = getMqttService()
@@ -16,4 +17,3 @@ export async function publishMqtt(
     return { success: false, error: String(error) }
   }
 }
-

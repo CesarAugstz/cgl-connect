@@ -174,7 +174,7 @@ export default function ColorCommandWidget({
       }
     } catch (error) {
       console.error('Error sending color command', error)
-      toast.error('Failed to send color command to device')
+      toast.error('Falha ao enviar comando de cor para o dispositivo')
     } finally {
     }
   }
