@@ -12,7 +12,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
 
 export default function UsersPage() {
@@ -22,15 +22,15 @@ export default function UsersPage() {
   const {
     data: users,
     isLoading,
-    refetch
+    refetch,
   } = useFindManyUser({
     include: {
       _count: {
         select: {
-          devices: true
-        }
-      }
-    }
+          devices: true,
+        },
+      },
+    },
   })
 
   const handleAddNew = () => {
@@ -50,7 +50,7 @@ export default function UsersPage() {
 
   return (
     <div className="container mx-auto py-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between gap-3 flex-wrap items-center mb-6">
         <h1 className="text-3xl font-bold">Gerenciamento de Usuários</h1>
         <div className="flex gap-2">
           <Button

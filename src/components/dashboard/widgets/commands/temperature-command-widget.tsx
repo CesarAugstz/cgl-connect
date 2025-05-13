@@ -19,7 +19,7 @@ export default function TemperatureCommandWidget({
   size,
 }: TemperatureCommandWidgetProps) {
   const toast = useToast()
-  const [temperature, setTemperature] = useState(50)
+  const [temperature, setTemperature] = useState(22)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [temperatureIsSet, setTemperatureIsSet] = useState(false)
 
@@ -47,11 +47,11 @@ export default function TemperatureCommandWidget({
     const latestStatus = device.data?.telemetry[0]?.data as any
     console.log('latest temperature status', latestStatus)
     const temperatureValue =
-      (typeof latestStatus?.temperature === 'number'
+      typeof latestStatus?.temperature === 'number'
         ? latestStatus.temperature
         : typeof latestStatus?.value === 'number'
           ? latestStatus.value
-          : 500) / 10
+          : 22
 
     setTemperature(temperatureValue)
     setTemperatureIsSet(true)
@@ -70,18 +70,20 @@ export default function TemperatureCommandWidget({
       const result = await sendDeviceCommand({
         deviceId,
         topicSuffix: 'COMMAND_TEMPERATURE',
-        payload: newTemperature * 10,
+        payload: newTemperature,
       })
 
       if (result.success) {
         setTemperature(newTemperature)
-        toast.success(`Command sent: Set temperature to ${newTemperature}K`)
+        toast.success(
+          `Comando enviado: Temperatura definida para ${newTemperature}°C`,
+        )
       } else {
         throw new Error(result.error)
       }
     } catch (error) {
       console.error('Error sending temperature command', error)
-      toast.error('Failed to send temperature command to device')
+      toast.error('Falha ao enviar comando de temperatura para o dispositivo')
     } finally {
       setIsSubmitting(false)
     }
@@ -91,7 +93,7 @@ export default function TemperatureCommandWidget({
     return (
       <Card className="h-full">
         <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-          <Thermometer className="h-5 w-5 text-blue-500 mb-1" />
+          <Thermometer className="h-5 w-5 text-red-500 mb-1" />
           <div className="text-2xl font-bold">Loading...</div>
         </CardContent>
       </Card>
@@ -102,14 +104,14 @@ export default function TemperatureCommandWidget({
     return (
       <Card className="h-full">
         <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-          <Thermometer className="h-5 w-5 text-blue-500 mb-1" />
-          <div className="text-sm font-bold mb-1">{temperature}K</div>
+          <Thermometer className="h-5 w-5 text-red-500 mb-1" />
+          <div className="text-sm font-bold mb-1">{temperature}°C</div>
           <Slider
             className="w-16"
             defaultValue={[temperature]}
-            max={100}
-            step={1}
-            min={1}
+            max={30}
+            step={0.5}
+            min={16}
             onValueCommit={handleTemperatureChange}
             disabled={isSubmitting}
           />
@@ -122,8 +124,8 @@ export default function TemperatureCommandWidget({
     <Card className="h-full">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
-          <Thermometer className="h-4 w-4 text-blue-500 mr-2" />
-          Temperatura da Luz
+          <Thermometer className="h-4 w-4 text-red-500 mr-2" />
+          Controle de Temperatura
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4">
@@ -132,22 +134,26 @@ export default function TemperatureCommandWidget({
             {isSubmitting ? (
               <LoadingSpinner size="sm" className="h-2 w-2 mr-2" />
             ) : (
-              <span className="text-2xl font-bold">{temperature}K</span>
+              <span className="text-2xl font-bold">{temperature}°C</span>
             )}
             <span className="ml-2 text-xs text-muted-foreground">
-              Define a temperatura da cor da luz
+              Define a temperatura para o ambiente
             </span>
           </div>
 
           <div className="mb-6">
             <Slider
               defaultValue={[temperature]}
-              max={100}
-              step={1}
-              min={1}
+              max={30}
+              step={0.5}
+              min={16}
               onValueCommit={handleTemperatureChange}
               disabled={isSubmitting}
             />
+            <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+              <span>16°C</span>
+              <span>30°C</span>
+            </div>
           </div>
         </div>
       </CardContent>

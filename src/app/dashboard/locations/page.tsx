@@ -52,7 +52,7 @@ export default function LocationsPage() {
 
   return (
     <div className="container mx-auto py-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between gap-3 flex-wrap items-center mb-6">
         <h1 className="text-3xl font-bold">Gerenciamento de Localizações</h1>
         <div className="flex gap-2">
           <Button

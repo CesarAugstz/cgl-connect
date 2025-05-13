@@ -12,25 +12,27 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
 
 export default function DeviceTypesPage() {
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const [editingDeviceTypeId, setEditingDeviceTypeId] = useState<string | undefined>()
+  const [editingDeviceTypeId, setEditingDeviceTypeId] = useState<
+    string | undefined
+  >()
 
   const {
     data: deviceTypes,
     isLoading,
-    refetch
+    refetch,
   } = useFindManyDeviceType({
     include: {
       _count: {
         select: {
-          devices: true
-        }
-      }
-    }
+          devices: true,
+        },
+      },
+    },
   })
 
   const handleAddNew = () => {
@@ -50,8 +52,10 @@ export default function DeviceTypesPage() {
 
   return (
     <div className="container mx-auto py-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Gerenciamento de Tipos de Dispositivo</h1>
+      <div className="flex justify-between flex-wrap gap-3 items-center mb-6">
+        <h1 className="text-3xl font-bold">
+          Gerenciamento de Tipos de Dispositivo
+        </h1>
         <div className="flex gap-2">
           <Button
             variant="outline"

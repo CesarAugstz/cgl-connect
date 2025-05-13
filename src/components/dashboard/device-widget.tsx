@@ -169,6 +169,8 @@ export default function DeviceWidget({
     switch (suffix) {
       case 'STATUS_TEMPERATURE':
         return 'Temperatura'
+      case 'STATUS_LIGHT_TEMPERATURE':
+        return 'Temp da Luz'
       case 'STATUS_HUMIDITY':
         return 'Humidade'
       case 'STATUS_ONOFF':
@@ -185,6 +187,8 @@ export default function DeviceWidget({
         return 'Cor'
       case 'COMMAND_TEMPERATURE':
         return 'Temperatura'
+      case 'COMMAND_LIGHT_TEMPERATURE':
+        return 'Temp da Luz'
       default:
         throw new Error(`Unknown topic suffix: ${suffix}`)
     }
@@ -195,7 +199,7 @@ export default function DeviceWidget({
       return (
         <div className="flex flex-col gap-4 h-full justify-center items-center">
           <div className="text-center">
-            <p className="text-sm font-medium mb-2">Widget Size</p>
+            <p className="text-sm font-medium mb-2">Tamanho</p>
             <Select
               value={widgetSize}
               onValueChange={value => handleSizeChange(value as WidgetSize)}
@@ -204,9 +208,9 @@ export default function DeviceWidget({
                 <SelectValue placeholder="Select size" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="SMALL">Small</SelectItem>
-                <SelectItem value="MEDIUM">Medium</SelectItem>
-                <SelectItem value="LARGE">Large</SelectItem>
+                <SelectItem value="SMALL">Pequeno</SelectItem>
+                <SelectItem value="MEDIUM">Médio </SelectItem>
+                <SelectItem value="LARGE">Grande</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -321,14 +325,14 @@ export default function DeviceWidget({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setIsResizing(true)}>
-                Change Size
+                Alterar Tamanho
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive"
                 onClick={handleDeleteDevice}
               >
                 <X className="mr-2 h-4 w-4" />
-                Remove
+                Remover
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

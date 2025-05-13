@@ -8,15 +8,19 @@ import { Card, CardContent } from '@/components/ui/card'
 import LoadingSpinner from '@/components/loading-spinner'
 
 // Status Widgets
-import TemperatureWidget from './status/temperature-widget'
+import LightTemperatureWidget from './status/light-temperature-widget'
 import OnOffCommandWidget from './commands/onoff-command-widget'
 import BrightnessCommandWidget from './commands/brightness-command-widget'
 import ColorCommandWidget from './commands/color-command-widget'
-import TemperatureCommandWidget from './commands/temperature-command-widget'
+import LightTemperatureCommandWidget from './commands/light-temperature-command-widget'
 import BrightnessStatusWidget from './status/brightness-status-widget'
 import ColorStatusWidget from './status/color-status-widget'
 import HumidityWidget from './status/humidity-widget'
 import OnOffStatusWidget from './status/onoff-status-widget'
+import TemperatureWidget from './status/temperature-widget'
+
+// Command Widgets
+import TemperatureCommandWidget from './commands/temperature-command-widget'
 
 interface WidgetResolverProps {
   deviceId: string
@@ -29,7 +33,7 @@ export default function WidgetResolver({
   topicSuffix,
   size,
 }: WidgetResolverProps) {
-  const [refreshInterval, setRefreshInterval] = useState<number>(30000)
+  const [refreshInterval] = useState<number>(30000)
 
   const isCommandTopic = topicSuffix.startsWith('COMMAND_')
   const isStatusTopic = topicSuffix.startsWith('STATUS_')
@@ -50,12 +54,12 @@ export default function WidgetResolver({
       take: size === 'LARGE' ? 50 : size === 'MEDIUM' ? 20 : 5,
     },
     {
-      enabled: isStatusTopic, // Only fetch telemetry for status topics
+      enabled: isStatusTopic,
     },
   )
 
   useEffect(() => {
-    if (!isStatusTopic) return // Don't set up refresh for command topics
+    if (!isStatusTopic) return
 
     const interval = setInterval(() => {
       refetch()
@@ -72,7 +76,6 @@ export default function WidgetResolver({
     )
   }
 
-  // Command Topics
   if (isCommandTopic) {
     switch (topicSuffix) {
       case 'COMMAND_ONOFF':
@@ -81,6 +84,8 @@ export default function WidgetResolver({
         return <BrightnessCommandWidget deviceId={deviceId} size={size} />
       case 'COMMAND_COLOR':
         return <ColorCommandWidget deviceId={deviceId} size={size} />
+      case 'COMMAND_LIGHT_TEMPERATURE':
+        return <LightTemperatureCommandWidget deviceId={deviceId} size={size} />
       case 'COMMAND_TEMPERATURE':
         return <TemperatureCommandWidget deviceId={deviceId} size={size} />
       default:
@@ -100,16 +105,17 @@ export default function WidgetResolver({
     return (
       <Card className="h-full">
         <CardContent className="flex items-center justify-center h-full">
-          <p className="text-sm text-muted-foreground">No data available</p>
+          <p className="text-sm text-muted-foreground">
+            Nenhum dado disponível
+          </p>
         </CardContent>
       </Card>
     )
   }
 
-  // Status Topics
   switch (topicSuffix) {
-    case 'STATUS_TEMPERATURE':
-      return <TemperatureWidget data={telemetryData} size={size} />
+    case 'STATUS_LIGHT_TEMPERATURE':
+      return <LightTemperatureWidget data={telemetryData} size={size} />
     case 'STATUS_HUMIDITY':
       return <HumidityWidget data={telemetryData} size={size} />
     case 'STATUS_ONOFF':
@@ -118,6 +124,8 @@ export default function WidgetResolver({
       return <BrightnessStatusWidget data={telemetryData} size={size} />
     case 'STATUS_COLOR':
       return <ColorStatusWidget data={telemetryData} size={size} />
+    case 'STATUS_TEMPERATURE':
+      return <TemperatureWidget data={telemetryData} size={size} />
     default:
       return (
         <Card className="h-full">

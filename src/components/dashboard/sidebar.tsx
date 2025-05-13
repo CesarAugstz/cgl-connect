@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import {
   LayoutDashboard,
   Settings,
@@ -11,6 +13,7 @@ import {
   Library,
   Tablet,
   MapPin,
+  Menu,
 } from 'lucide-react'
 
 interface Route {
@@ -22,6 +25,21 @@ interface Route {
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const [isMobile, setIsMobile] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768)
+      if (window.innerWidth >= 768) {
+        setIsDrawerOpen(false)
+      }
+    }
+
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   const routes: Route[] = [
     {
@@ -57,8 +75,8 @@ export default function Sidebar() {
     },
   ] as const
 
-  return (
-    <div className="flex flex-col w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700">
+  const SidebarContent = () => (
+    <div className="size-full flex flex-col h-full bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700">
       <div className="py-4 px-3 border-b border-slate-200 dark:border-slate-700">
         <div className="flex items-center justify-center">
           <h1 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -79,6 +97,7 @@ export default function Sidebar() {
                     ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white'
                     : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white',
                 )}
+                onClick={() => isMobile && setIsDrawerOpen(false)}
               >
                 {route.icon}
                 {route.name}
@@ -88,5 +107,30 @@ export default function Sidebar() {
         </nav>
       </div>
     </div>
+  )
+
+  return (
+    <>
+      {isMobile ? (
+        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+          <DrawerTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="fixed top-3 left-3 z-50 md:hidden"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="">
+            <SidebarContent />
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <div className="w-64 h-full">
+          <SidebarContent />
+        </div>
+      )}
+    </>
   )
 }

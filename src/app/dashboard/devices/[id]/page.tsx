@@ -389,7 +389,7 @@ export default function DeviceDetailPage() {
                     )}
                   </div>
 
-                  <div>
+                  <div className="flex flex-wrap">
                     <h3 className="text-lg font-medium mb-2">
                       Gerenciamento do Dispositivo
                     </h3>

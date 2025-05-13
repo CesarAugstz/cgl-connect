@@ -22,7 +22,7 @@ interface TemperatureWidgetProps {
   size: 'SMALL' | 'MEDIUM' | 'LARGE'
 }
 
-export default function TemperatureWidget({
+export default function LightTemperatureWidget({
   data,
   size,
 }: TemperatureWidgetProps) {
@@ -47,9 +47,9 @@ export default function TemperatureWidget({
     return (
       <Card className="h-full">
         <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-          <Thermometer className="h-5 w-5 text-red-500 mb-1" />
+          <Thermometer className="h-5 w-5 text-blue-500 mb-1" />
           <div className="text-2xl font-bold">{latestTemp}°C</div>
-          <p className="text-xs text-muted-foreground">Temperatura</p>
+          <p className="text-xs text-muted-foreground">Temperature</p>
         </CardContent>
       </Card>
     )
@@ -59,8 +59,8 @@ export default function TemperatureWidget({
     <Card className="h-full">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
-          <Thermometer className="h-4 w-4 text-red-500 mr-2" />
-          Temperatura
+          <Thermometer className="h-4 w-4 text-blue-500 mr-2" />
+          Temperature
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4">
@@ -84,12 +84,12 @@ export default function TemperatureWidget({
                   <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10 }} />
                   <Tooltip
                     labelFormatter={label => `Time: ${label}`}
-                    formatter={value => [`${value}°C`, 'Temperatura']}
+                    formatter={value => [`${value}°C`, 'Temperature']}
                   />
                   <Line
                     type="monotone"
                     dataKey="value"
-                    stroke="#ef4444"
+                    stroke="#3b82f6"
                     strokeWidth={2}
                     dot={false}
                   />
